@@ -1,0 +1,49 @@
+.root, .game-root {
+    -fx-background-color: linear-gradient(to bottom right, #0B1026, #1A103D 55%, #112A4D);
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-text-fill: #F5F7FF;
+}
+.label { -fx-text-fill: #F5F7FF; }
+.menu-panel, .game-panel, .event-log, .machine-panel, .human-area {
+    -fx-background-color: rgba(26, 16, 61, 0.82);
+    -fx-background-radius: 16;
+    -fx-border-color: rgba(0, 229, 255, 0.48);
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 229, 255, 0.20), 18, 0.2, 0, 0);
+}
+.title-label { -fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #00E5FF; -fx-effect: dropshadow(gaussian, #FF4FD8, 18, 0.4, 0, 0); }
+.subtitle-label { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #FF4FD8; -fx-letter-spacing: 2px; }
+.instruction-label, .hint-label { -fx-text-fill: #C8D0F0; -fx-font-size: 14px; }
+.hint-label { -fx-text-fill: #FFE66D; }
+.neon-button {
+    -fx-background-color: linear-gradient(to right, #9B5CFF, #FF4FD8);
+    -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 26 10 26;
+    -fx-background-radius: 20; -fx-cursor: hand;
+}
+.neon-button:hover { -fx-effect: dropshadow(gaussian, #00E5FF, 14, 0.6, 0, 0); }
+.danger-button { -fx-background-color: #FF3B3B; }
+.machine-container { -fx-padding: 8; }
+.machine-panel { -fx-padding: 10; -fx-alignment: center; }
+.machine-eliminated { -fx-border-color: #FF3B3B; -fx-opacity: 0.58; }
+.sum-title, .log-title, .human-name { -fx-font-weight: bold; -fx-text-fill: #FF4FD8; }
+.sum-safe, .sum-warning, .sum-danger { -fx-font-size: 54px; -fx-font-weight: bold; }
+.sum-safe { -fx-text-fill: #00E5FF; }
+.sum-warning { -fx-text-fill: #FFE66D; }
+.sum-danger { -fx-text-fill: #FF3B3B; }
+.turn-message { -fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #F5F7FF; }
+.event-log { -fx-background-color: rgba(11, 16, 38, 0.92); }
+.event-log .scroll-pane, .event-log .viewport { -fx-background-color: transparent; }
+.log-entry { -fx-text-fill: #C8D0F0; -fx-font-size: 12px; }
+.card {
+    -fx-background-color: #F5F7FF; -fx-background-radius: 10; -fx-border-color: #9B5CFF;
+    -fx-border-radius: 10; -fx-border-width: 2; -fx-alignment: center;
+}
+.card .label { -fx-text-fill: #1A103D; -fx-font-size: 25px; -fx-font-weight: bold; }
+.card-content { -fx-alignment: center; }
+.card-back { -fx-background-color: linear-gradient(to bottom right, #1A103D, #9B5CFF); -fx-border-color: #00E5FF; }
+.card-back .label { -fx-text-fill: #00E5FF; -fx-font-size: 17px; }
+.card-valid { -fx-cursor: hand; -fx-border-color: #00E5FF; }
+.card-valid:hover { -fx-translate-y: -10; -fx-effect: dropshadow(gaussian, #00E5FF, 14, 0.5, 0, 0); }
+.card-invalid { -fx-opacity: 0.42; -fx-border-color: #FF3B3B; }
+.card-selected { -fx-border-color: #FFE66D; -fx-border-width: 4; }
+.winner-label { -fx-font-size: 24px; -fx-text-fill: #FFE66D; }

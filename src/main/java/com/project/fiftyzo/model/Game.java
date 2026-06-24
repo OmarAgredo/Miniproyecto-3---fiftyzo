@@ -27,6 +27,23 @@ public final class Game {
         for (int i = 1; i <= machineCount; i++) machinePlayers.add(new MachinePlayer("Machine " + i));
     }
 
+    /**
+     * Creates an already initialized game state for package-level model tests.
+     * The supplied table must already contain its initial card.
+     */
+    Game(Deck deck, Table table, HumanPlayer humanPlayer, List<MachinePlayer> machinePlayers) {
+        this.deck = java.util.Objects.requireNonNull(deck, "deck");
+        this.table = java.util.Objects.requireNonNull(table, "table");
+        this.humanPlayer = java.util.Objects.requireNonNull(humanPlayer, "humanPlayer");
+        this.machinePlayers = new ArrayList<>(java.util.Objects.requireNonNull(machinePlayers, "machinePlayers"));
+        List<Player> players = new ArrayList<>();
+        players.add(humanPlayer);
+        players.addAll(machinePlayers);
+        this.turnManager = new TurnManager(players);
+        this.status = GameStatus.IN_PROGRESS;
+        updateTurnStatus();
+    }
+
     /** Initializes, shuffles, deals, and prepares the human player's first turn. */
     public void start() {
         if (status != GameStatus.NOT_STARTED) throw new IllegalStateException("A game can only be started once.");

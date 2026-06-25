@@ -9,100 +9,102 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="game-root game-scroll" vbarPolicy="AS_NEEDED" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.fiftyzo.controller.GameController">
-    <content>
-        <StackPane prefHeight="760" prefWidth="1100" styleClass="game-stage">
-            <AnchorPane prefHeight="760" prefWidth="1100" styleClass="game-shell">
-                <children>
-                    <HBox fx:id="machinePlayersContainer" alignment="CENTER" layoutX="70" layoutY="18" minHeight="112" minWidth="720" prefHeight="128" prefWidth="860" spacing="8" styleClass="machine-container editable-game-section" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="18.0" />
+<StackPane prefHeight="760" prefWidth="1100" styleClass="game-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.fiftyzo.controller.GameController">
+    <children>
+        <StackPane fx:id="gameCanvas" maxHeight="760" maxWidth="1100" minHeight="760" minWidth="1100" prefHeight="760" prefWidth="1100" styleClass="game-canvas">
+            <children>
+                <AnchorPane maxHeight="760" maxWidth="1100" minHeight="760" minWidth="1100" prefHeight="760" prefWidth="1100" styleClass="game-shell">
+                    <children>
+                        <HBox fx:id="machinePlayersContainer" alignment="CENTER" layoutX="70" layoutY="18" minHeight="112" minWidth="720" prefHeight="128" prefWidth="860" spacing="8" styleClass="machine-container editable-game-section" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="18.0" />
 
-                    <Button fx:id="optionsButton" layoutX="983" layoutY="22" onAction="#showOptionsMenu" styleClass="options-button game-ui-button" text="OPTIONS" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="22.0" />
+                        <Button fx:id="optionsButton" layoutX="983" layoutY="22" onAction="#showOptionsMenu" styleClass="game-button game-button-small options-button" text="OPTIONS" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="22.0" />
 
-                    <VBox fx:id="mainGameplayPanel" alignment="CENTER" layoutX="130" layoutY="164" minHeight="360" minWidth="600" prefHeight="386" prefWidth="645" spacing="10" styleClass="game-panel editable-game-section" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="325.0" AnchorPane.topAnchor="164.0">
-                        <padding><Insets bottom="22" left="30" right="30" top="20" /></padding>
-                        <Label styleClass="sum-title" text="CURRENT TABLE SUM" />
-                        <Label fx:id="currentSumLabel" styleClass="sum-safe" text="0" />
-                        <HBox alignment="CENTER" spacing="30" styleClass="deck-table-row">
-                            <children>
-                                <VBox alignment="CENTER" minHeight="180" minWidth="180" prefHeight="192" prefWidth="190" spacing="8" styleClass="card-slot deck-section">
-                                    <children>
-                                        <Label alignment="CENTER" minWidth="160" prefWidth="180" styleClass="slot-title" text="DECK" textAlignment="CENTER" />
-                                        <VBox fx:id="deckContainer" alignment="CENTER" minHeight="140" minWidth="90" prefHeight="140" prefWidth="96" styleClass="dynamic-card-placeholder" />
-                                        <Label fx:id="deckCountLabel" alignment="CENTER" minWidth="160" prefWidth="180" styleClass="deck-count" text="0 cards remaining" textAlignment="CENTER" />
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER" minHeight="180" minWidth="180" prefHeight="192" prefWidth="190" spacing="8" styleClass="card-slot table-section">
-                                    <children>
-                                        <Label alignment="CENTER" minWidth="160" prefWidth="180" styleClass="slot-title" text="TABLE CARD" textAlignment="CENTER" />
-                                        <VBox fx:id="tableCardContainer" alignment="CENTER" minHeight="140" minWidth="96" prefHeight="140" prefWidth="106" styleClass="dynamic-card-placeholder" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                        <Label fx:id="turnMessageLabel" alignment="CENTER" maxWidth="520" styleClass="turn-message" text="" textAlignment="CENTER" wrapText="true" />
-                    </VBox>
+                        <VBox fx:id="mainGameplayPanel" alignment="CENTER" layoutX="130" layoutY="164" minHeight="360" minWidth="600" prefHeight="386" prefWidth="645" spacing="10" styleClass="game-panel center-play-area editable-game-section" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="325.0" AnchorPane.topAnchor="164.0">
+                            <padding><Insets bottom="22" left="30" right="30" top="20" /></padding>
+                            <Label styleClass="sum-title" text="CURRENT TABLE SUM" />
+                            <Label fx:id="currentSumLabel" styleClass="sum-safe" text="0" />
+                            <HBox alignment="CENTER" spacing="30" styleClass="deck-table-row">
+                                <children>
+                                    <VBox alignment="CENTER" minHeight="180" minWidth="180" prefHeight="192" prefWidth="190" spacing="8" styleClass="card-slot deck-section">
+                                        <children>
+                                            <Label alignment="CENTER" minWidth="160" prefWidth="180" styleClass="slot-title" text="DECK" textAlignment="CENTER" />
+                                            <VBox fx:id="deckContainer" alignment="CENTER" minHeight="140" minWidth="90" prefHeight="140" prefWidth="96" styleClass="dynamic-card-placeholder" />
+                                            <Label fx:id="deckCountLabel" alignment="CENTER" minWidth="160" prefWidth="180" styleClass="deck-count" text="0 cards remaining" textAlignment="CENTER" />
+                                        </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" minHeight="180" minWidth="180" prefHeight="192" prefWidth="190" spacing="8" styleClass="card-slot table-section">
+                                        <children>
+                                            <Label alignment="CENTER" minWidth="160" prefWidth="180" styleClass="slot-title" text="TABLE CARD" textAlignment="CENTER" />
+                                            <VBox fx:id="tableCardContainer" alignment="CENTER" minHeight="140" minWidth="96" prefHeight="140" prefWidth="106" styleClass="dynamic-card-placeholder" />
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </HBox>
+                            <Label fx:id="turnMessageLabel" alignment="CENTER" maxWidth="520" styleClass="turn-message" text="" textAlignment="CENTER" wrapText="true" />
+                        </VBox>
 
-                    <VBox fx:id="eventLogPanel" layoutX="792" layoutY="170" minHeight="350" minWidth="270" prefHeight="368" prefWidth="286" spacing="12" styleClass="event-log editable-game-section" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="170.0">
-                        <padding><Insets bottom="18" left="16" right="16" top="18" /></padding>
-                        <Label styleClass="log-title" text="EVENT LOG" />
-                        <ScrollPane fx:id="eventLogScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS">
-                            <content><VBox fx:id="eventLogBox" minHeight="280" prefHeight="300" spacing="8" styleClass="event-log-placeholder" /></content>
-                        </ScrollPane>
-                    </VBox>
+                        <VBox fx:id="eventLogPanel" layoutX="792" layoutY="170" minHeight="350" minWidth="270" prefHeight="368" prefWidth="286" spacing="12" styleClass="event-log-panel editable-game-section" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="170.0">
+                            <padding><Insets bottom="18" left="16" right="16" top="18" /></padding>
+                            <Label styleClass="log-title" text="EVENT LOG" />
+                            <ScrollPane fx:id="eventLogScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS">
+                                <content><VBox fx:id="eventLogBox" minHeight="280" prefHeight="300" spacing="8" styleClass="event-log-placeholder" /></content>
+                            </ScrollPane>
+                        </VBox>
 
-                    <VBox fx:id="humanHandPanel" alignment="CENTER" layoutX="42" layoutY="562" minHeight="160" minWidth="960" prefHeight="172" prefWidth="1016" spacing="14" styleClass="human-area editable-game-section" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="42.0">
-                        <padding><Insets bottom="14" left="22" right="22" top="10" /></padding>
-                        <Label fx:id="humanNameLabel" styleClass="human-name" text="HUMAN PLAYER HAND" />
-                        <HBox fx:id="humanHandContainer" alignment="CENTER" minHeight="124" prefHeight="124" prefWidth="920" spacing="9" styleClass="human-hand-placeholder" />
-                    </VBox>
-                </children>
-            </AnchorPane>
+                        <VBox fx:id="humanHandPanel" alignment="CENTER" layoutX="42" layoutY="562" minHeight="160" minWidth="960" prefHeight="172" prefWidth="1016" spacing="14" styleClass="human-hand-area editable-game-section" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="42.0">
+                            <padding><Insets bottom="14" left="22" right="22" top="10" /></padding>
+                            <Label fx:id="humanNameLabel" styleClass="human-name" text="HUMAN PLAYER HAND" />
+                            <HBox fx:id="humanHandContainer" alignment="CENTER" minHeight="124" prefHeight="124" prefWidth="920" spacing="9" styleClass="human-hand-placeholder" />
+                        </VBox>
+                    </children>
+                </AnchorPane>
 
-            <StackPane fx:id="overlayLayer" managed="false" mouseTransparent="true" prefHeight="760" prefWidth="1100" styleClass="overlay-layer" visible="false">
-                <children>
-                    <StackPane fx:id="overlayBackdrop" styleClass="overlay-backdrop" />
+                <StackPane fx:id="overlayLayer" managed="false" maxHeight="760" maxWidth="1100" minHeight="760" minWidth="1100" mouseTransparent="true" prefHeight="760" prefWidth="1100" styleClass="overlay-layer" visible="false">
+                    <children>
+                        <StackPane fx:id="overlayBackdrop" styleClass="overlay-backdrop" />
 
-                    <VBox fx:id="optionsOverlay" alignment="CENTER" managed="false" maxHeight="380" maxWidth="420" minHeight="340" minWidth="380" prefHeight="360" prefWidth="410" spacing="12" styleClass="overlay-panel options-modal" visible="false">
-                        <padding><Insets bottom="30" left="34" right="34" top="28" /></padding>
-                        <Label styleClass="overlay-title" text="OPTIONS" />
-                        <Button maxWidth="250" minWidth="250" onAction="#resumeGame" prefWidth="250" styleClass="game-ui-button overlay-button" text="Resume" />
-                        <Button maxWidth="250" minWidth="250" onAction="#requestRestartGame" prefWidth="250" styleClass="game-ui-button overlay-button" text="Restart Game" />
-                        <Button maxWidth="250" minWidth="250" onAction="#requestBackToMainMenu" prefWidth="250" styleClass="game-ui-button overlay-button" text="Back to Main Menu" />
-                        <Button maxWidth="250" minWidth="250" onAction="#showHowToPlayOverlay" prefWidth="250" styleClass="game-ui-button overlay-button" text="How to Play" />
-                        <Button maxWidth="250" minWidth="250" onAction="#requestExitGame" prefWidth="250" styleClass="game-ui-button overlay-button" text="Exit" />
-                    </VBox>
+                        <VBox fx:id="optionsOverlay" alignment="CENTER" managed="false" maxHeight="380" maxWidth="420" minHeight="340" minWidth="380" prefHeight="360" prefWidth="410" spacing="12" styleClass="overlay-modal options-modal" visible="false">
+                            <padding><Insets bottom="30" left="34" right="34" top="28" /></padding>
+                            <Label styleClass="overlay-title" text="OPTIONS" />
+                            <Button maxWidth="250" minWidth="250" onAction="#resumeGame" prefWidth="250" styleClass="game-button overlay-button" text="Resume" />
+                            <Button maxWidth="250" minWidth="250" onAction="#requestRestartGame" prefWidth="250" styleClass="game-button overlay-button" text="Restart Game" />
+                            <Button maxWidth="250" minWidth="250" onAction="#requestBackToMainMenu" prefWidth="250" styleClass="game-button overlay-button" text="Back to Main Menu" />
+                            <Button maxWidth="250" minWidth="250" onAction="#showHowToPlayOverlay" prefWidth="250" styleClass="game-button overlay-button" text="How to Play" />
+                            <Button maxWidth="250" minWidth="250" onAction="#requestExitGame" prefWidth="250" styleClass="game-button game-button-danger overlay-button" text="Exit" />
+                        </VBox>
 
-                    <VBox fx:id="aceOverlay" alignment="CENTER" managed="false" maxHeight="240" maxWidth="340" minHeight="210" minWidth="300" prefHeight="220" prefWidth="320" spacing="16" styleClass="overlay-panel ace-modal" visible="false">
-                        <padding><Insets bottom="28" left="30" right="30" top="26" /></padding>
-                        <Label styleClass="overlay-title" text="Choose Ace value" />
-                        <HBox alignment="CENTER" spacing="16">
-                            <children>
-                                <Button fx:id="aceOneButton" minWidth="90" onAction="#chooseAceOne" styleClass="game-ui-button overlay-button ace-choice-button" text="1" />
-                                <Button fx:id="aceTenButton" minWidth="90" onAction="#chooseAceTen" styleClass="game-ui-button overlay-button ace-choice-button" text="10" />
-                            </children>
-                        </HBox>
-                    </VBox>
+                        <VBox fx:id="aceOverlay" alignment="CENTER" managed="false" maxHeight="240" maxWidth="340" minHeight="210" minWidth="300" prefHeight="220" prefWidth="320" spacing="16" styleClass="overlay-modal ace-modal" visible="false">
+                            <padding><Insets bottom="28" left="30" right="30" top="26" /></padding>
+                            <Label styleClass="overlay-title" text="Choose Ace value" />
+                            <HBox alignment="CENTER" spacing="16">
+                                <children>
+                                    <Button fx:id="aceOneButton" minWidth="90" onAction="#chooseAceOne" styleClass="game-button overlay-button ace-choice-button" text="1" />
+                                    <Button fx:id="aceTenButton" minWidth="90" onAction="#chooseAceTen" styleClass="game-button overlay-button ace-choice-button" text="10" />
+                                </children>
+                            </HBox>
+                        </VBox>
 
-                    <VBox fx:id="confirmOverlay" alignment="CENTER" managed="false" maxHeight="310" maxWidth="430" minHeight="250" minWidth="360" prefHeight="280" prefWidth="410" spacing="14" styleClass="overlay-panel confirm-modal" visible="false">
-                        <padding><Insets bottom="28" left="30" right="30" top="26" /></padding>
-                        <Label fx:id="confirmTitleLabel" styleClass="overlay-title" text="Confirm" />
-                        <Label fx:id="confirmMessageLabel" alignment="CENTER" maxWidth="320" styleClass="overlay-body" text="" textAlignment="CENTER" wrapText="true" />
-                        <HBox alignment="CENTER" spacing="14">
-                            <children>
-                                <Button fx:id="confirmAcceptButton" minWidth="120" onAction="#acceptConfirmation" styleClass="game-ui-button overlay-button" text="Confirm" />
-                                <Button fx:id="confirmCancelButton" minWidth="120" onAction="#cancelConfirmation" styleClass="game-ui-button overlay-button secondary-button" text="Cancel" />
-                            </children>
-                        </HBox>
-                    </VBox>
+                        <VBox fx:id="confirmOverlay" alignment="CENTER" managed="false" maxHeight="310" maxWidth="430" minHeight="250" minWidth="360" prefHeight="280" prefWidth="410" spacing="14" styleClass="overlay-modal confirm-modal" visible="false">
+                            <padding><Insets bottom="28" left="30" right="30" top="26" /></padding>
+                            <Label fx:id="confirmTitleLabel" styleClass="overlay-title" text="Confirm" />
+                            <Label fx:id="confirmMessageLabel" alignment="CENTER" maxWidth="320" styleClass="overlay-body" text="" textAlignment="CENTER" wrapText="true" />
+                            <HBox alignment="CENTER" spacing="14">
+                                <children>
+                                    <Button fx:id="confirmAcceptButton" minWidth="120" onAction="#acceptConfirmation" styleClass="game-button overlay-button" text="Confirm" />
+                                    <Button fx:id="confirmCancelButton" minWidth="120" onAction="#cancelConfirmation" styleClass="game-button overlay-button secondary-button" text="Cancel" />
+                                </children>
+                            </HBox>
+                        </VBox>
 
-                    <VBox fx:id="howToPlayOverlay" alignment="CENTER" managed="false" maxHeight="460" maxWidth="540" minHeight="390" minWidth="480" prefHeight="430" prefWidth="520" spacing="14" styleClass="overlay-panel how-to-play-modal" visible="false">
-                        <padding><Insets bottom="28" left="34" right="34" top="26" /></padding>
-                        <Label styleClass="overlay-title" text="How to Play" />
-                        <Label styleClass="overlay-body" text="Keep the table sum at 50 or below.&#10;&#10;On your turn, play one valid card:&#10;2-8 add their value.&#10;10 adds 10.&#10;9 adds 0.&#10;J, Q, K subtract 10.&#10;A can be 1 or 10.&#10;&#10;After playing, you draw a card. If you have no valid card, you are eliminated. Last player standing wins." wrapText="true" />
-                        <Button minWidth="160" onAction="#closeHowToPlayOverlay" styleClass="game-ui-button overlay-button" text="Close" />
-                    </VBox>
-                </children>
-            </StackPane>
+                        <VBox fx:id="howToPlayOverlay" alignment="CENTER" managed="false" maxHeight="460" maxWidth="540" minHeight="390" minWidth="480" prefHeight="430" prefWidth="520" spacing="14" styleClass="overlay-modal how-to-play-modal" visible="false">
+                            <padding><Insets bottom="28" left="34" right="34" top="26" /></padding>
+                            <Label styleClass="overlay-title" text="How to Play" />
+                            <Label styleClass="overlay-body" text="Keep the table sum at 50 or below.&#10;&#10;On your turn, play one valid card:&#10;2-8 add their value.&#10;10 adds 10.&#10;9 adds 0.&#10;J, Q, K subtract 10.&#10;A can be 1 or 10.&#10;&#10;After playing, you draw a card. If you have no valid card, you are eliminated. Last player standing wins." wrapText="true" />
+                            <Button minWidth="160" onAction="#closeHowToPlayOverlay" styleClass="game-button overlay-button" text="Close" />
+                        </VBox>
+                    </children>
+                </StackPane>
+            </children>
         </StackPane>
-    </content>
-</ScrollPane>
+    </children>
+</StackPane>

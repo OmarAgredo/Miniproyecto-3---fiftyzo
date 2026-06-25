@@ -19,9 +19,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.animation.PauseTransition;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -37,6 +40,7 @@ import javafx.util.Duration;
 /** Renders game state and delegates player actions to the model. */
 public final class GameController {
     @FXML private HBox machinePlayersContainer;
+    @FXML private StackPane gameCanvas;
     @FXML private Label currentSumLabel;
     @FXML private Label turnMessageLabel;
     @FXML private VBox deckContainer;
@@ -71,12 +75,32 @@ public final class GameController {
     private static final double MACHINE_CARD_HEIGHT = 82;
     private static final double DECK_IMAGE_HEIGHT = 140;
     private static final double DECK_IMAGE_SCALE = 0.93;
+    private static final double BASE_CANVAS_WIDTH = 1100;
+    private static final double BASE_CANVAS_HEIGHT = 760;
     private static final double FACE_UP_VIEWPORT_INSET = 3;
     private static final int SPRITE_COLUMNS = 5;
     private static final String CARD_IMAGE_ROOT = "/com/project/fiftyzo/images/cards/";
     private static final String SPECIAL_CARD_IMAGE_ROOT = CARD_IMAGE_ROOT + "special/";
     private static final String CARD_BACK_PATH = CARD_IMAGE_ROOT + "machine-card-back-red.png";
     private static final String DECK_IMAGE_PATH = CARD_IMAGE_ROOT + "deck-pile-red.png";
+
+    @FXML
+    private void initialize() {
+        gameCanvas.sceneProperty().addListener((observable, oldScene, scene) -> {
+            if (scene != null) bindGameCanvasScale(scene);
+        });
+    }
+
+    private void bindGameCanvasScale(Scene scene) {
+        gameCanvas.scaleXProperty().unbind();
+        gameCanvas.scaleYProperty().unbind();
+        DoubleBinding canvasScale = Bindings.createDoubleBinding(
+                () -> Math.min(scene.getWidth() / BASE_CANVAS_WIDTH, scene.getHeight() / BASE_CANVAS_HEIGHT),
+                scene.widthProperty(),
+                scene.heightProperty());
+        gameCanvas.scaleXProperty().bind(canvasScale);
+        gameCanvas.scaleYProperty().bind(canvasScale);
+    }
 
     /** Receives a started game from the start controller. */
     public void setGame(Game game) {
@@ -100,7 +124,7 @@ public final class GameController {
         machinePlayersContainer.getChildren().clear();
         for (MachinePlayer machine : game.getMachinePlayers()) {
             VBox panel = new VBox(7);
-            panel.getStyleClass().add("machine-panel");
+            panel.getStyleClass().add("machine-slot");
             Label machineName = new Label(machine.getName());
             machineName.getStyleClass().add("machine-name");
             panel.getChildren().add(machineName);
@@ -394,7 +418,6 @@ public final class GameController {
 
     private StackPane createDeckView() {
         StackPane view = new StackPane();
-        view.getStyleClass().addAll("card", "card-back");
         view.getStyleClass().add("deck-card");
         view.setPrefSize(CARD_WIDTH, DECK_IMAGE_HEIGHT);
         view.setMinSize(CARD_WIDTH, DECK_IMAGE_HEIGHT);
@@ -410,7 +433,7 @@ public final class GameController {
 
     private StackPane createMachineCardView() {
         StackPane view = new StackPane();
-        view.getStyleClass().addAll("card", "card-back", "machine-card");
+        view.getStyleClass().add("machine-card-back");
         view.setPrefSize(MACHINE_CARD_WIDTH, MACHINE_CARD_HEIGHT);
         view.setMinSize(MACHINE_CARD_WIDTH, MACHINE_CARD_HEIGHT);
         ImageView imageView = createCardBackImageView();

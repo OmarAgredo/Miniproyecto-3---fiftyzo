@@ -1,91 +1,113 @@
+/*
+ * Design tokens
+ * Text / warm cream: #F6F0DD, #F3E9C9, #E8E0C8
+ * Panel / dark translucent: rgba(8, 20, 24, 0.74-0.94)
+ * Border / eerie lime: #B8FF6A, rgba(216, 243, 138, 0.42-0.78)
+ * Shadow / soft glow: dropshadow(gaussian, rgba(216, 243, 138, 0.16-0.30), ...)
+ * Danger / accent: #FF6B5F, #FF3B3B, #F4D76A
+ */
+
+/* Base */
 .root {
     -fx-background-color: #081418;
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
     -fx-text-fill: #F6F0DD;
 }
-.scroll-pane, .scroll-pane > .viewport, .scroll-pane .corner {
-    -fx-background-color: #081418;
-}
-.scroll-bar, .scroll-bar .track, .scroll-bar .increment-button, .scroll-bar .decrement-button {
+.scroll-pane,
+.scroll-pane > .viewport,
+.scroll-pane .corner,
+.scroll-bar,
+.scroll-bar .track,
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
     -fx-background-color: #081418;
 }
 .scroll-bar .thumb {
     -fx-background-color: rgba(198, 255, 126, 0.34);
     -fx-background-radius: 8;
 }
-.game-root, .game-scroll, .game-scroll > .viewport, .game-stage, .game-shell {
+.label {
+    -fx-text-fill: #F6F0DD;
+    -fx-effect: dropshadow(gaussian, #11130C, 4, 0.42, 0, 1);
+}
+
+/* Scene */
+.game-root {
+    -fx-background-color: #081418;
+    -fx-alignment: center;
+}
+.game-canvas {
     -fx-background-color: #081418;
     -fx-background-image: url("../images/backgrounds/background-main.png");
     -fx-background-size: cover;
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
 }
-.game-scroll .corner {
-    -fx-background-color: #081418;
+.game-shell {
+    -fx-background-color: transparent;
 }
-.game-scroll {
-    -fx-fit-to-width: true;
-    -fx-fit-to-height: true;
+.game-canvas,
+.game-shell {
+    -fx-min-width: 1100;
+    -fx-min-height: 760;
+    -fx-pref-width: 1100;
+    -fx-pref-height: 760;
+    -fx-max-width: 1100;
+    -fx-max-height: 760;
+}
+.game-top-bar {
+    -fx-background-color: transparent;
+}
+.editable-game-section {
     -fx-background-insets: 0;
-    -fx-padding: 0;
 }
-.game-scroll .scroll-bar:horizontal {
-    -fx-opacity: 0;
-    -fx-pref-height: 0;
-    -fx-max-height: 0;
+
+/* Typography */
+.title-label {
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F3E9C9;
+    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.34), 16, 0.35, 0, 0);
 }
-.game-stage, .game-shell {
-    -fx-min-width: 1000;
-    -fx-min-height: 680;
+.subtitle-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #D8F38A;
+    -fx-letter-spacing: 2px;
 }
-.label {
-    -fx-text-fill: #F6F0DD;
-    -fx-effect: dropshadow(gaussian, #11130C, 4, 0.42, 0, 1);
+.instruction-label,
+.hint-label {
+    -fx-text-fill: #E8E0C8;
+    -fx-font-size: 14px;
 }
-.menu-panel, .game-panel, .event-log, .machine-panel, .human-area {
-    -fx-background-color: rgba(8, 20, 24, 0.74);
-    -fx-background-radius: 14;
-    -fx-border-color: rgba(198, 255, 126, 0.42);
-    -fx-border-radius: 14;
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.16), 13, 0.18, 0, 0);
+.hint-label {
+    -fx-text-fill: #F3E9C9;
 }
-.title-label { -fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #F3E9C9; -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.34), 16, 0.35, 0, 0); }
-.subtitle-label { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #D8F38A; -fx-letter-spacing: 2px; }
-.instruction-label, .hint-label { -fx-text-fill: #E8E0C8; -fx-font-size: 14px; }
-.hint-label { -fx-text-fill: #F3E9C9; }
-.neon-button {
-    -fx-background-color: linear-gradient(to right, rgba(11, 22, 24, 0.92), rgba(52, 68, 32, 0.90));
-    -fx-border-color: rgba(216, 243, 138, 0.60);
-    -fx-border-radius: 20;
-    -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 26 10 26;
-    -fx-background-radius: 20; -fx-cursor: hand;
+.sum-title,
+.log-title,
+.human-name {
+    -fx-font-family: "Arcade Raiders", "Hey Comic", "Segoe UI", sans-serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F3E9C9;
+    -fx-effect: dropshadow(gaussian, #11130C, 5, 0.52, 0, 1);
 }
-.neon-button:hover { -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.50), 14, 0.42, 0, 0); }
-.danger-button { -fx-background-color: #FF3B3B; }
-.game-top-bar { -fx-background-color: transparent; }
-.options-button {
-    -fx-background-color: linear-gradient(to bottom, rgba(48, 63, 31, 0.96), rgba(8, 20, 24, 0.98));
-    -fx-border-color: rgba(216, 243, 138, 0.78);
-    -fx-border-radius: 14; -fx-background-radius: 14;
-    -fx-border-width: 1.5;
-    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
-    -fx-text-fill: #F3E9C9; -fx-font-size: 12px; -fx-font-weight: bold;
-    -fx-padding: 8 16 8 16; -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.26), 12, 0.30, 0, 0);
+.winner-label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #F3E9C9;
 }
-.options-button:hover {
-    -fx-background-color: linear-gradient(to bottom, rgba(70, 84, 38, 0.98), rgba(12, 27, 25, 0.98));
-    -fx-border-color: #B8FF6A;
-    -fx-text-fill: #FFF8D8;
-    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.48), 16, 0.38, 0, 0);
-}
-.game-ui-button {
+
+/* Buttons */
+.game-button {
     -fx-background-color: linear-gradient(to bottom, rgba(23, 34, 22, 0.94), rgba(8, 20, 24, 0.95));
+    -fx-background-insets: 0;
     -fx-background-radius: 13;
     -fx-border-color: rgba(216, 243, 138, 0.72);
+    -fx-border-insets: 0;
     -fx-border-radius: 13;
     -fx-border-width: 1.5;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -94,58 +116,103 @@
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.18), 10, 0.24, 0, 0);
 }
-.game-ui-button:hover {
+.game-button:hover {
     -fx-background-color: linear-gradient(to bottom, rgba(54, 69, 31, 0.96), rgba(11, 22, 24, 0.98));
     -fx-border-color: #B8FF6A;
     -fx-text-fill: #FFF8D8;
     -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.42), 14, 0.34, 0, 0);
 }
-.game-ui-button:pressed {
+.game-button:focused {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+.game-button:pressed {
     -fx-translate-y: 1;
     -fx-background-color: rgba(8, 20, 24, 0.98);
     -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.14), 6, 0.18, 0, 0);
 }
-.game-ui-button:disabled {
+.game-button:disabled {
     -fx-opacity: 0.42;
     -fx-cursor: default;
 }
-.options-button.game-ui-button {
-    -fx-background-color: rgba(8, 20, 24, 0.88);
-    -fx-background-insets: 0;
-    -fx-background-radius: 14;
-    -fx-border-color: rgba(216, 243, 138, 0.78);
-    -fx-border-insets: 0;
-    -fx-border-radius: 14;
-    -fx-border-width: 1.5;
-    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
-    -fx-text-fill: #F6F0DD;
+.game-button-small {
     -fx-font-size: 12px;
-    -fx-font-weight: bold;
     -fx-padding: 8 16 8 16;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-cursor: hand;
+}
+.game-button-danger {
+    -fx-background-color: linear-gradient(to bottom, rgba(92, 28, 28, 0.96), rgba(38, 10, 12, 0.96));
+    -fx-border-color: rgba(255, 107, 95, 0.78);
+}
+.game-button-danger:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(118, 35, 35, 0.98), rgba(52, 13, 16, 0.98));
+    -fx-border-color: #FF6B5F;
+}
+.overlay-button {
+    -fx-min-height: 34;
+}
+.options-button {
+    -fx-background-color: rgba(8, 20, 24, 0.88);
+    -fx-border-color: rgba(216, 243, 138, 0.78);
     -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.26), 12, 0.30, 0, 0);
 }
-.options-button.game-ui-button:focused {
-    -fx-background-insets: 0;
-    -fx-background-color: rgba(8, 20, 24, 0.88);
-    -fx-border-color: rgba(216, 243, 138, 0.78);
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
+.secondary-button {
+    -fx-border-color: rgba(201, 195, 164, 0.58);
+    -fx-text-fill: #C9C3A4;
 }
-.options-button.game-ui-button:hover {
-    -fx-background-color: rgba(23, 34, 22, 0.94);
-    -fx-border-color: #B8FF6A;
-    -fx-text-fill: #FFF8D8;
-    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.48), 16, 0.38, 0, 0);
+.secondary-button:hover {
+    -fx-border-color: rgba(243, 233, 201, 0.84);
+    -fx-text-fill: #F3E9C9;
 }
-.options-button.game-ui-button:pressed {
-    -fx-translate-y: 1;
-    -fx-background-color: rgba(5, 13, 15, 0.96);
-    -fx-border-color: rgba(198, 255, 126, 0.58);
-    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.16), 8, 0.22, 0, 0);
+.ace-choice-button {
+    -fx-font-size: 20px;
+    -fx-min-height: 46;
 }
+
+/* Panels */
+.menu-panel,
+.game-panel,
+.event-log-panel,
+.overlay-modal {
+    -fx-background-color: rgba(8, 20, 24, 0.76);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(198, 255, 126, 0.50);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 18, 0.22, 0, 0);
+}
+.game-panel {
+    -fx-background-color: rgba(8, 20, 24, 0.76);
+}
+.center-play-area {
+    -fx-alignment: center;
+}
+.event-log-panel {
+    -fx-background-color: linear-gradient(to bottom, rgba(8, 20, 24, 0.78), rgba(10, 18, 15, 0.88));
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(216, 243, 138, 0.48);
+    -fx-border-radius: 18;
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 20, 0.24, 0, 0);
+}
+.human-hand-area {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+}
+.machine-slot {
+    -fx-padding: 4 6 6 6;
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.52), 5, 0.35, 0, 1);
+}
+.machine-eliminated {
+    -fx-border-color: #FF6B5F;
+    -fx-opacity: 0.58;
+}
+
+/* Overlay */
 .overlay-layer {
     -fx-background-color: transparent;
     -fx-alignment: center;
@@ -153,7 +220,7 @@
 .overlay-backdrop {
     -fx-background-color: rgba(3, 6, 7, 0.72);
 }
-.overlay-panel {
+.overlay-modal {
     -fx-background-color: rgba(8, 20, 24, 0.94);
     -fx-background-radius: 18;
     -fx-border-color: rgba(216, 243, 138, 0.78);
@@ -164,7 +231,9 @@
 .options-modal {
     -fx-padding: 28 34 30 34;
 }
-.ace-modal, .confirm-modal, .how-to-play-modal {
+.ace-modal,
+.confirm-modal,
+.how-to-play-modal {
     -fx-padding: 26 30 28 30;
 }
 .overlay-title {
@@ -181,68 +250,13 @@
     -fx-line-spacing: 3;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.44, 0, 1);
 }
-.overlay-button {
-    -fx-min-height: 34;
-}
-.secondary-button {
-    -fx-border-color: rgba(201, 195, 164, 0.58);
-    -fx-text-fill: #C9C3A4;
-}
-.secondary-button:hover {
-    -fx-border-color: rgba(243, 233, 201, 0.84);
-    -fx-text-fill: #F3E9C9;
-}
-.ace-choice-button {
-    -fx-font-size: 20px;
-    -fx-min-height: 46;
-}
-.options-dialog {
-    -fx-background-color: #081418;
-}
-.options-dialog > .content, .options-dialog > .header-panel {
-    -fx-background-color: #081418;
-}
-.options-dialog .label {
-    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
-    -fx-text-fill: #F6F0DD;
-}
-.menu-dialog-button {
-    -fx-background-color: rgba(8, 20, 24, 0.92);
-    -fx-border-color: rgba(216, 243, 138, 0.45);
-    -fx-border-radius: 10; -fx-background-radius: 10;
-    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
-    -fx-text-fill: #F6F0DD; -fx-font-weight: bold;
-}
-.menu-dialog-button:hover {
-    -fx-border-color: #B8FF6A;
-}
+
+/* Machine players */
 .machine-container {
     -fx-padding: 0 0 4 0;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-effect: none;
-}
-.editable-game-section {
-    -fx-background-insets: 0;
-}
-.dynamic-card-placeholder {
-    -fx-alignment: center;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-effect: none;
-}
-.event-log-placeholder {
-    -fx-padding: 0 2 0 0;
-}
-.human-hand-placeholder {
-    -fx-alignment: center;
-}
-.machine-panel {
-    -fx-padding: 4 6 6 6;
-    -fx-alignment: center;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.52), 5, 0.35, 0, 1);
 }
 .machine-name {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
@@ -253,28 +267,27 @@
 .machine-hand {
     -fx-alignment: center;
 }
-.machine-card {
-    -fx-background-radius: 7;
-    -fx-border-radius: 7;
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.16), 7, 0.20, 0, 0);
-}
-.machine-eliminated { -fx-border-color: #FF6B5F; -fx-opacity: 0.58; }
-.sum-title, .log-title, .human-name {
-    -fx-font-family: "Arcade Raiders", "Hey Comic", "Segoe UI", sans-serif;
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #F3E9C9;
-    -fx-effect: dropshadow(gaussian, #11130C, 5, 0.52, 0, 1);
-}
-.sum-safe, .sum-warning, .sum-danger {
+
+/* Table and hand areas */
+.sum-safe,
+.sum-warning,
+.sum-danger {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 50px;
     -fx-font-weight: bold;
 }
-.sum-safe { -fx-text-fill: #B8FF6A; -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.34), 12, 0.30, 0, 0); }
-.sum-warning { -fx-text-fill: #F4D76A; -fx-effect: dropshadow(gaussian, rgba(244, 215, 106, 0.38), 12, 0.30, 0, 0); }
-.sum-danger { -fx-text-fill: #FF6B5F; -fx-effect: dropshadow(gaussian, rgba(255, 119, 200, 0.26), 12, 0.26, 0, 0); }
+.sum-safe {
+    -fx-text-fill: #B8FF6A;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.34), 12, 0.30, 0, 0);
+}
+.sum-warning {
+    -fx-text-fill: #F4D76A;
+    -fx-effect: dropshadow(gaussian, rgba(244, 215, 106, 0.38), 12, 0.30, 0, 0);
+}
+.sum-danger {
+    -fx-text-fill: #FF6B5F;
+    -fx-effect: dropshadow(gaussian, rgba(255, 119, 200, 0.26), 12, 0.26, 0, 0);
+}
 .turn-message {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 16px;
@@ -283,7 +296,9 @@
     -fx-padding: 1 0 0 0;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.44, 0, 1);
 }
-.deck-table-row { -fx-padding: 2 0 7 0; }
+.deck-table-row {
+    -fx-padding: 2 0 7 0;
+}
 .card-slot {
     -fx-min-width: 170;
     -fx-alignment: center;
@@ -304,45 +319,45 @@
     -fx-text-fill: #C9C3A4;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.42, 0, 1);
 }
-.game-panel {
-    -fx-background-color: rgba(8, 20, 24, 0.76);
-    -fx-border-color: rgba(198, 255, 126, 0.50);
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 18, 0.22, 0, 0);
-}
-.human-area {
+.dynamic-card-placeholder {
+    -fx-alignment: center;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-effect: none;
 }
-.event-log {
-    -fx-background-color: linear-gradient(to bottom, rgba(8, 20, 24, 0.78), rgba(10, 18, 15, 0.88));
-    -fx-background-radius: 18;
-    -fx-border-color: rgba(216, 243, 138, 0.48);
-    -fx-border-radius: 18;
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 20, 0.24, 0, 0);
+.human-hand-placeholder {
+    -fx-alignment: center;
 }
-.event-log .scroll-pane, .event-log .scroll-pane > .viewport, .event-log .scroll-pane .corner { -fx-background-color: transparent; }
-.event-log .scroll-pane {
+
+/* Event log */
+.event-log-panel .scroll-pane,
+.event-log-panel .scroll-pane > .viewport,
+.event-log-panel .scroll-pane .corner {
+    -fx-background-color: transparent;
+}
+.event-log-panel .scroll-pane {
     -fx-padding: 2 0 0 0;
     -fx-background-insets: 0;
 }
-.event-log .scroll-bar:vertical {
+.event-log-panel .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-pref-width: 8;
 }
-.event-log .scroll-bar:vertical .track {
+.event-log-panel .scroll-bar:vertical .track {
     -fx-background-color: rgba(8, 20, 24, 0.24);
     -fx-background-radius: 8;
 }
-.event-log .scroll-bar:vertical .thumb {
+.event-log-panel .scroll-bar:vertical .thumb {
     -fx-background-color: rgba(216, 243, 138, 0.34);
     -fx-background-radius: 8;
 }
-.event-log .scroll-bar:vertical .increment-button,
-.event-log .scroll-bar:vertical .decrement-button {
+.event-log-panel .scroll-bar:vertical .increment-button,
+.event-log-panel .scroll-bar:vertical .decrement-button {
     -fx-background-color: transparent;
     -fx-padding: 0;
+}
+.event-log-placeholder {
+    -fx-padding: 0 2 0 0;
 }
 .log-entry {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
@@ -350,6 +365,8 @@
     -fx-font-size: 12px;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.42, 0, 1);
 }
+
+/* Cards */
 /* Card image assets live on the classpath under:
    /com/project/fiftyzo/images/cards/
    Use resource paths from Java, never absolute file-system paths. */
@@ -362,8 +379,14 @@
     -fx-alignment: center;
     -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.28), 12, 0.28, 0, 0);
 }
-.card .label { -fx-text-fill: #1A103D; -fx-font-size: 25px; -fx-font-weight: bold; }
-.card-content { -fx-alignment: center; }
+.card .label {
+    -fx-text-fill: #1A103D;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
+.card-content {
+    -fx-alignment: center;
+}
 .card-image {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
@@ -378,25 +401,9 @@
     -fx-border-color: rgba(216, 243, 138, 0.56);
     -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.18), 9, 0.22, 0, 0);
 }
-.machine-card.card-back {
-    -fx-background-radius: 7;
-    -fx-border-radius: 7;
-    -fx-border-width: 1;
-    -fx-border-color: rgba(216, 243, 138, 0.42);
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.16), 7, 0.20, 0, 0);
-}
-.card-back .label { -fx-text-fill: #B8FF6A; -fx-font-size: 17px; }
-.deck-card {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 12, 0.24, 0, 0);
-}
-.deck-card.card-back {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+.card-back .label {
+    -fx-text-fill: #B8FF6A;
+    -fx-font-size: 17px;
 }
 .card-valid {
     -fx-cursor: hand;
@@ -420,9 +427,38 @@
     -fx-border-color: rgba(255, 107, 95, 0.62);
     -fx-border-width: 1;
 }
-.card-selected { -fx-border-color: #F3E9C9; -fx-border-width: 3; }
+.card-selected {
+    -fx-border-color: #F3E9C9;
+    -fx-border-width: 3;
+}
+.deck-card {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 12, 0.24, 0, 0);
+}
+.deck-card .label {
+    -fx-text-fill: #B8FF6A;
+    -fx-font-size: 17px;
+}
+.machine-card-back {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(216, 243, 138, 0.42);
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.16), 7, 0.20, 0, 0);
+}
+.machine-card-back .label {
+    -fx-text-fill: #B8FF6A;
+    -fx-font-size: 13px;
+}
 .table-card {
-    -fx-scale-x: 1.12; -fx-scale-y: 1.12;
+    -fx-scale-x: 1.12;
+    -fx-scale-y: 1.12;
     -fx-opacity: 1;
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -431,9 +467,9 @@
     -fx-background-radius: 0;
     -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.36), 18, 0.28, 0, 0);
 }
-.table-card.card-invalid, .table-card.card-image {
+.table-card.card-invalid,
+.table-card.card-image {
     -fx-border-color: transparent;
     -fx-border-width: 0;
     -fx-opacity: 1;
 }
-.winner-label { -fx-font-size: 24px; -fx-text-fill: #F3E9C9; }

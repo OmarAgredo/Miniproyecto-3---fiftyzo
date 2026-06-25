@@ -15,7 +15,7 @@
             <Label fx:id="subtitleLabel" text="A LIMINAL CARD SURVIVAL GAME" styleClass="subtitle-label" />
             <Label fx:id="instructionLabel" wrapText="true" styleClass="instruction-label" />
             <ComboBox fx:id="machineCountComboBox" promptText="Machine players" maxWidth="220" />
-            <Button fx:id="startButton" text="START GAME" onAction="#handleStartGame" styleClass="neon-button" />
+            <Button fx:id="startButton" text="START GAME" onAction="#handleStartGame" styleClass="game-button" />
             <Label text="Keep the table sum at 50 or below." styleClass="hint-label" />
         </VBox>
     </center>

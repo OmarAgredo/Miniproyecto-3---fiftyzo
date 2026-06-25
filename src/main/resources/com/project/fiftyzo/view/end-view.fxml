@@ -14,15 +14,15 @@
             <Label fx:id="resultTitleLabel" styleClass="title-label" wrapText="true" />
             <Label fx:id="winnerLabel" styleClass="winner-label" />
             <Label text="FINAL EVENT LOG" styleClass="subtitle-label" />
-            <ScrollPane fitToWidth="true" prefHeight="260" styleClass="event-log">
+            <ScrollPane fitToWidth="true" prefHeight="260" styleClass="event-log-panel">
                 <content>
                     <VBox fx:id="finalLogBox" spacing="8">
                         <padding><Insets top="12" right="12" bottom="12" left="12" /></padding>
                     </VBox>
                 </content>
             </ScrollPane>
-            <Button fx:id="playAgainButton" text="PLAY AGAIN" onAction="#handlePlayAgain" styleClass="neon-button" />
-            <Button fx:id="exitButton" text="EXIT" onAction="#handleExit" styleClass="neon-button danger-button" />
+            <Button fx:id="playAgainButton" text="PLAY AGAIN" onAction="#handlePlayAgain" styleClass="game-button" />
+            <Button fx:id="exitButton" text="EXIT" onAction="#handleExit" styleClass="game-button game-button-danger" />
         </VBox>
     </center>
 </BorderPane>

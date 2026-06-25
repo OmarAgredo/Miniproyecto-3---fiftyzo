@@ -1,6 +1,6 @@
 package com.project.fiftyzo.controller;
 
-import com.project.fiftyzo.Main;
+import com.project.fiftyzo.FiftyzoApplication;
 import com.project.fiftyzo.model.HumanPlayer;
 import com.project.fiftyzo.model.Player;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public final class EndController {
     public void handlePlayAgain() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/project/fiftyzo/view/start-view.fxml")));
-            ((Stage) playAgainButton.getScene().getWindow()).setScene(Main.createScene(root));
+            ((Stage) playAgainButton.getScene().getWindow()).setScene(FiftyzoApplication.createScene(root));
         } catch (IOException exception) {
             throw new IllegalStateException("The start screen could not be loaded.", exception);
         }

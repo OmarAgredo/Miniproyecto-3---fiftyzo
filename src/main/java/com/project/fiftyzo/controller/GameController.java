@@ -1,6 +1,6 @@
 package com.project.fiftyzo.controller;
 
-import com.project.fiftyzo.Main;
+import com.project.fiftyzo.FiftyzoApplication;
 import com.project.fiftyzo.exception.EmptyDeckException;
 import com.project.fiftyzo.exception.InvalidMoveException;
 import com.project.fiftyzo.exception.NoPlayableCardException;
@@ -189,7 +189,7 @@ public final class GameController {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/project/fiftyzo/view/end-view.fxml")));
             Parent root = loader.load();
             loader.<EndController>getController().setResult(game.getWinner(), List.copyOf(eventMessages));
-            ((Stage) currentSumLabel.getScene().getWindow()).setScene(Main.createScene(root));
+            ((Stage) currentSumLabel.getScene().getWindow()).setScene(FiftyzoApplication.createScene(root));
         } catch (IOException exception) {
             throw new IllegalStateException("The end screen could not be loaded.", exception);
         }

@@ -56,7 +56,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.project.fiftyzo.Launcher</mainClass>
+                    <mainClass>com.project.fiftyzo.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>

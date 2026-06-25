@@ -1,6 +1,6 @@
 package com.project.fiftyzo.controller;
 
-import com.project.fiftyzo.Main;
+import com.project.fiftyzo.FiftyzoApplication;
 import com.project.fiftyzo.model.Game;
 import java.io.IOException;
 import java.util.Objects;
@@ -37,7 +37,7 @@ public final class StartController {
             Parent root = loader.load();
             loader.<GameController>getController().setGame(game);
             Stage stage = (Stage) startButton.getScene().getWindow();
-            stage.setScene(Main.createScene(root));
+            stage.setScene(FiftyzoApplication.createScene(root));
         } catch (IOException exception) {
             throw new IllegalStateException("The game screen could not be loaded.", exception);
         }

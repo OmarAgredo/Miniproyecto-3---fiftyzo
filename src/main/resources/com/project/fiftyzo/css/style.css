@@ -34,6 +34,9 @@
 .event-log { -fx-background-color: rgba(11, 16, 38, 0.92); }
 .event-log .scroll-pane, .event-log .viewport { -fx-background-color: transparent; }
 .log-entry { -fx-text-fill: #C8D0F0; -fx-font-size: 12px; }
+/* Card image assets live on the classpath under:
+   /com/project/fiftyzo/images/cards/
+   Use resource paths from Java, never absolute file-system paths. */
 .card {
     -fx-background-color: #F5F7FF; -fx-background-radius: 10; -fx-border-color: #9B5CFF;
     -fx-border-radius: 10; -fx-border-width: 2; -fx-alignment: center;

@@ -1,6 +1,7 @@
 package com.project.fiftyzo.controller;
 
 import com.project.fiftyzo.Main;
+import com.project.fiftyzo.exception.EmptyDeckException;
 import com.project.fiftyzo.exception.InvalidMoveException;
 import com.project.fiftyzo.exception.NoPlayableCardException;
 import com.project.fiftyzo.model.Card;
@@ -13,8 +14,10 @@ import com.project.fiftyzo.model.Player;
 import com.project.fiftyzo.model.Rank;
 import com.project.fiftyzo.model.Suit;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,6 +47,9 @@ public final class GameController {
 
     private Game game;
     private boolean machineTurnScheduled;
+    private boolean endScreenShown;
+    private boolean gameOverReasonLogged;
+    private final List<String> eventMessages = new ArrayList<>();
 
     /** Receives a started game from the start controller. */
     public void setGame(Game game) {
@@ -116,6 +122,7 @@ public final class GameController {
 
     /** Adds one message to the on-screen event log. */
     public void appendLog(String message) {
+        eventMessages.add(message);
         Label entry = new Label(message);
         entry.setWrapText(true);
         entry.getStyleClass().add("log-entry");
@@ -148,12 +155,16 @@ public final class GameController {
 
     /** Advances turns, including automatic machine turns and eliminations. */
     public void continueTurnFlow() {
-        if (game.isGameOver()) { showEndScreen(); return; }
+        if (game.isGameOver()) {
+            logGameOverReason();
+            showEndScreen();
+            return;
+        }
         Player current = game.getCurrentPlayer();
         if (!current.hasPlayableCard(game.getTable().getCurrentSum())) {
             String playerName = current.getName();
             game.processNoPlayableCardForCurrentPlayer();
-            appendLog(playerName + " was eliminated because no card could be played.");
+            appendLog(playerName + " has no playable cards and was eliminated.");
             renderGameState();
             continueTurnFlow();
             return;
@@ -164,15 +175,20 @@ public final class GameController {
             return;
         }
         turnMessageLabel.setText(current.getName() + " is thinking...");
+        renderHumanHand();
         if (!machineTurnScheduled) scheduleMachineTurn();
     }
 
     /** Loads the end screen after the model identifies a winner. */
     public void showEndScreen() {
+        if (endScreenShown) return;
+        if (!game.isGameOver() || game.getActivePlayers().size() != 1 || game.getWinner() == null) return;
+        logGameOverReason();
+        endScreenShown = true;
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/project/fiftyzo/view/end-view.fxml")));
             Parent root = loader.load();
-            loader.<EndController>getController().setWinner(game.getWinner());
+            loader.<EndController>getController().setResult(game.getWinner(), List.copyOf(eventMessages));
             ((Stage) currentSumLabel.getScene().getWindow()).setScene(Main.createScene(root));
         } catch (IOException exception) {
             throw new IllegalStateException("The end screen could not be loaded.", exception);
@@ -181,19 +197,43 @@ public final class GameController {
 
     private void scheduleMachineTurn() {
         machineTurnScheduled = true;
-        PauseTransition pause = new PauseTransition(Duration.millis(550));
+        PauseTransition pause = new PauseTransition(Duration.seconds(randomDelay(2.0, 4.0)));
         pause.setOnFinished(event -> {
             machineTurnScheduled = false;
             if (game.isGameOver() || !(game.getCurrentPlayer() instanceof MachinePlayer)) return;
             try {
-                boolean deckWasEmpty = game.getDeck().isEmpty();
-                PlayResult result = game.playMachineTurn();
+                MachinePlayer machine = (MachinePlayer) game.getCurrentPlayer();
+                PlayResult result = game.playMachineCard();
                 appendPlayResult(result);
-                if (deckWasEmpty) appendLog("Deck was rebuilt from table cards.");
                 renderGameState();
-                continueTurnFlow();
+                if (result.isPlayerEliminated()) {
+                    continueTurnFlow();
+                    return;
+                }
+                turnMessageLabel.setText(machine.getName() + " is drawing a card...");
+                appendLog(machine.getName() + " is drawing a card.");
+                scheduleMachineDraw(machine);
             } catch (NoPlayableCardException | InvalidMoveException exception) {
                 showError("Machine turn failed", exception.getMessage());
+            }
+        });
+        pause.play();
+    }
+
+    private void scheduleMachineDraw(MachinePlayer machine) {
+        PauseTransition pause = new PauseTransition(Duration.seconds(randomDelay(1.0, 2.0)));
+        pause.setOnFinished(event -> {
+            if (game.isGameOver() || game.getCurrentPlayer() != machine) return;
+            try {
+                boolean deckWasEmpty = game.getDeck().isEmpty();
+                game.drawCardForCurrentPlayer();
+                game.advanceTurn();
+                appendLog(machine.getName() + " drew a card.");
+                if (deckWasEmpty) appendLog("Deck was rebuilt from previous table cards.");
+                renderGameState();
+                continueTurnFlow();
+            } catch (EmptyDeckException exception) {
+                showError("Deck error", exception.getMessage());
             }
         });
         pause.play();
@@ -217,9 +257,20 @@ public final class GameController {
         return game.getHumanPlayer().getPlayableMoves(game.getTable().getCurrentSum()).stream().anyMatch(move -> move.getCard() == card);
     }
 
+    private double randomDelay(double minSeconds, double maxSeconds) {
+        return ThreadLocalRandom.current().nextDouble(minSeconds, maxSeconds);
+    }
+
     private void appendPlayResult(PlayResult result) {
-        if (result.isPlayerEliminated()) appendLog(result.getPlayer().getName() + " was eliminated.");
+        if (result.isPlayerEliminated()) appendLog(result.getPlayer().getName() + " has no playable cards and was eliminated.");
         else appendLog(result.getPlayer().getName() + " played " + formatCard(result.getPlayedCard()) + " as " + result.getSelectedValue() + ". Current sum: " + result.getNewSum() + ".");
+    }
+
+    private void logGameOverReason() {
+        if (gameOverReasonLogged || game.getWinner() == null) return;
+        gameOverReasonLogged = true;
+        appendLog("Game over because only one active player remains.");
+        appendLog("Winner: " + game.getWinner().getName() + ".");
     }
 
     private StackPane createCardView(Card card, boolean faceUp, boolean valid) {
@@ -247,6 +298,6 @@ public final class GameController {
             default -> String.valueOf(rank.ordinal() + 2);
         };
     }
-    private String suitSymbol(Suit suit) { return switch (suit) { case HEARTS -> "♥"; case DIAMONDS -> "♦"; case CLUBS -> "♣"; case SPADES -> "♠"; }; }
+    private String suitSymbol(Suit suit) { return switch (suit) { case HEARTS -> "\u2665"; case DIAMONDS -> "\u2666"; case CLUBS -> "\u2663"; case SPADES -> "\u2660"; }; }
     private void showError(String title, String message) { Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK); alert.setTitle(title); alert.setHeaderText(null); alert.showAndWait(); }
 }

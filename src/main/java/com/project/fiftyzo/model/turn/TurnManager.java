@@ -11,7 +11,7 @@ public final class TurnManager {
     public Player getCurrentPlayer() { return players.getCurrentPlayer(); }
     public void advanceTurn() { players.moveNext(); }
     public Player removeCurrentPlayer() { return players.removeCurrent(); }
-    public boolean hasWinner() { return players.hasOnlyOnePlayer(); }
-    public Player getWinner() { return players.getOnlyPlayer(); }
+    public boolean hasWinner() { return players.size() == 1 && players.getOnlyPlayer() != null; }
+    public Player getWinner() { return hasWinner() ? players.getOnlyPlayer() : null; }
     public List<Player> getActivePlayers() { return players.toList(); }
 }

@@ -74,11 +74,28 @@ public final class Game {
     }
 
     public PlayResult playMachineTurn() throws NoPlayableCardException, InvalidMoveException, GameOverException {
+        PlayResult playResult = playMachineCard();
+        if (playResult.isPlayerEliminated()) return playResult;
+        try {
+            drawCardForCurrentPlayer();
+        } catch (EmptyDeckException exception) {
+            throw new IllegalStateException("No card was available after deck recycling.", exception);
+        }
+        advanceTurn();
+        return new PlayResult(playResult.getPlayer(), playResult.getPlayedCard(), playResult.getSelectedValue(),
+                playResult.getPreviousSum(), playResult.getNewSum(), false, isGameOver(), getWinner(), playResult.getMessage());
+    }
+
+    /**
+     * Plays the machine's chosen card without drawing or advancing the turn.
+     * This supports timed presentation layers while keeping game rules in the model.
+     */
+    public PlayResult playMachineCard() throws NoPlayableCardException, InvalidMoveException, GameOverException {
         ensureActionable();
         if (!(getCurrentPlayer() instanceof MachinePlayer machine)) throw new InvalidMoveException("It is not a machine player's turn.");
         if (!machine.hasPlayableCard(table.getCurrentSum())) return eliminateForNoMove();
         PlayableMove move = machine.chooseMove(table.getCurrentSum());
-        return playCurrentCardSafely(move.getCard(), move.getValue());
+        return playCardWithoutDrawing(move.getCard(), move.getValue());
     }
 
     public void drawCardForCurrentPlayer() throws EmptyDeckException {
@@ -97,7 +114,11 @@ public final class Game {
     }
     public void processNoPlayableCardForCurrentPlayer() { eliminateCurrentPlayer(); }
     public void advanceTurn() { ensureStarted(); if (!isGameOver()) { turnManager.advanceTurn(); updateTurnStatus(); } }
-    public boolean isGameOver() { return turnManager != null && turnManager.hasWinner(); }
+    /** Returns whether exactly one active player remains in the turn cycle. */
+    public boolean isGameOver() {
+        return turnManager != null && turnManager.hasWinner() && turnManager.getActivePlayers().size() == 1;
+    }
+    /** Returns the sole active player only after the game is over. */
     public Player getWinner() { return isGameOver() ? turnManager.getWinner() : null; }
     public Player getCurrentPlayer() { return turnManager == null ? null : turnManager.getCurrentPlayer(); }
     public Deck getDeck() { return deck; }
@@ -109,11 +130,19 @@ public final class Game {
     public GameStatus getStatus() { return status; }
 
     private PlayResult playCurrentCard(Card card, int selectedValue) throws InvalidMoveException, EmptyDeckException {
+        PlayResult result = playCardWithoutDrawing(card, selectedValue);
+        drawCardForCurrentPlayer();
+        advanceTurn();
+        return new PlayResult(result.getPlayer(), result.getPlayedCard(), result.getSelectedValue(), result.getPreviousSum(),
+                result.getNewSum(), false, isGameOver(), getWinner(), result.getMessage());
+    }
+    private PlayResult playCardWithoutDrawing(Card card, int selectedValue) throws InvalidMoveException {
         Player player = getCurrentPlayer();
         if (!player.getHandSnapshot().contains(card)) throw new InvalidMoveException("The selected card is not in the current player's hand.");
         int previousSum = table.getCurrentSum();
-        table.playCard(card, selectedValue); player.removeCard(card); drawCardForCurrentPlayer(); advanceTurn();
-        return new PlayResult(player, card, selectedValue, previousSum, table.getCurrentSum(), false, isGameOver(), getWinner(),
+        table.playCard(card, selectedValue);
+        player.removeCard(card);
+        return new PlayResult(player, card, selectedValue, previousSum, table.getCurrentSum(), false, false, null,
                 player.getName() + " played " + card + ".");
     }
     private PlayResult playCurrentCardSafely(Card card, int selectedValue) throws InvalidMoveException {

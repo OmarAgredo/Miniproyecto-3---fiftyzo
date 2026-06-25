@@ -21,9 +21,17 @@ public final class CircularPlayerList {
     public Player removeCurrent() {
         if (current == null) return null;
         Player removed = current.player;
-        if (size == 1) current = null;
-        else { PlayerNode tail = findTail(); tail.next = current.next; current = current.next; }
-        size--; return removed;
+        if (size == 1) {
+            current = null;
+            size = 0;
+            return removed;
+        }
+        PlayerNode successor = current.next;
+        PlayerNode tail = findTail();
+        tail.next = successor;
+        current = successor;
+        size--;
+        return removed;
     }
     public int size() { return size; }
     public boolean hasOnlyOnePlayer() { return size == 1; }

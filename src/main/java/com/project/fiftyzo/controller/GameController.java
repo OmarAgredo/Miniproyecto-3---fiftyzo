@@ -22,15 +22,11 @@ import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -49,19 +45,36 @@ public final class GameController {
     @FXML private HBox humanHandContainer;
     @FXML private ScrollPane eventLogScrollPane;
     @FXML private Label humanNameLabel;
+    @FXML private Label deckCountLabel;
+    @FXML private StackPane overlayLayer;
+    @FXML private VBox optionsOverlay;
+    @FXML private VBox aceOverlay;
+    @FXML private VBox confirmOverlay;
+    @FXML private VBox howToPlayOverlay;
+    @FXML private Button aceOneButton;
+    @FXML private Button aceTenButton;
+    @FXML private Button confirmAcceptButton;
+    @FXML private Button confirmCancelButton;
+    @FXML private Label confirmTitleLabel;
+    @FXML private Label confirmMessageLabel;
 
     private Game game;
     private boolean machineTurnScheduled;
     private boolean endScreenShown;
     private boolean gameOverReasonLogged;
+    private Card pendingAceCard;
+    private Runnable pendingConfirmationAction;
     private final List<String> eventMessages = new ArrayList<>();
     private static final double CARD_WIDTH = 88;
     private static final double CARD_HEIGHT = 124;
+    private static final double MACHINE_CARD_WIDTH = 58;
+    private static final double MACHINE_CARD_HEIGHT = 82;
     private static final double DECK_IMAGE_HEIGHT = 140;
     private static final double DECK_IMAGE_SCALE = 0.93;
     private static final double FACE_UP_VIEWPORT_INSET = 3;
     private static final int SPRITE_COLUMNS = 5;
     private static final String CARD_IMAGE_ROOT = "/com/project/fiftyzo/images/cards/";
+    private static final String SPECIAL_CARD_IMAGE_ROOT = CARD_IMAGE_ROOT + "special/";
     private static final String CARD_BACK_PATH = CARD_IMAGE_ROOT + "machine-card-back-red.png";
     private static final String DECK_IMAGE_PATH = CARD_IMAGE_ROOT + "deck-pile-red.png";
 
@@ -88,13 +101,18 @@ public final class GameController {
         for (MachinePlayer machine : game.getMachinePlayers()) {
             VBox panel = new VBox(7);
             panel.getStyleClass().add("machine-panel");
-            panel.getChildren().add(new Label(machine.getName()));
+            Label machineName = new Label(machine.getName());
+            machineName.getStyleClass().add("machine-name");
+            panel.getChildren().add(machineName);
             if (!machine.isActive()) {
                 panel.getStyleClass().add("machine-eliminated");
                 panel.getChildren().add(new Label("ELIMINATED"));
             } else {
-                HBox hand = new HBox(5);
-                for (Card ignored : machine.getHandSnapshot()) hand.getChildren().add(createCardView(null, false, false));
+                HBox hand = new HBox(3);
+                hand.getStyleClass().add("machine-hand");
+                for (Card ignored : machine.getHandSnapshot()) {
+                    hand.getChildren().add(createMachineCardView());
+                }
                 panel.getChildren().add(hand);
             }
             machinePlayersContainer.getChildren().add(panel);
@@ -118,14 +136,9 @@ public final class GameController {
     /** Renders the top card and current sum with its risk color. */
     public void renderTable() {
         tableCardContainer.getChildren().clear();
-        VBox tableCardGroup = new VBox(12);
-        tableCardGroup.setAlignment(Pos.CENTER);
-        tableCardGroup.getStyleClass().add("table-card-group");
-        tableCardGroup.getChildren().add(new Label("TABLE CARD"));
         StackPane tableCard = createCardView(game.getTable().getTopCard(), true, false);
         tableCard.getStyleClass().add("table-card");
-        tableCardGroup.getChildren().add(tableCard);
-        tableCardContainer.getChildren().add(tableCardGroup);
+        tableCardContainer.getChildren().add(tableCard);
         int sum = game.getTable().getCurrentSum();
         currentSumLabel.setText(String.valueOf(sum));
         currentSumLabel.getStyleClass().removeAll("sum-safe", "sum-warning", "sum-danger");
@@ -135,9 +148,8 @@ public final class GameController {
     /** Renders the remaining deck count. */
     public void renderDeck() {
         deckContainer.getChildren().clear();
-        deckContainer.getChildren().add(new Label("DECK"));
         deckContainer.getChildren().add(createDeckView());
-        deckContainer.getChildren().add(new Label(game.getDeck().size() + " cards remaining"));
+        deckCountLabel.setText(game.getDeck().size() + " cards remaining");
     }
 
     /** Adds one message to the on-screen event log. */
@@ -163,38 +175,70 @@ public final class GameController {
         List<Integer> values = ace.getPossibleValues().stream().filter(game.getTable()::canApplyValue).toList();
         if (values.isEmpty()) return;
         if (values.size() == 1) { playHumanCard(ace, values.get(0)); return; }
-        Dialog<Integer> dialog = new Dialog<>();
-        dialog.setTitle("Choose Ace Value");
-        dialog.setHeaderText("Choose how the Ace should affect the table sum.");
-        ButtonType one = new ButtonType("Use as 1");
-        ButtonType ten = new ButtonType("Use as 10");
-        dialog.getDialogPane().getButtonTypes().addAll(one, ten, ButtonType.CANCEL);
-        dialog.setResultConverter(button -> button == one ? 1 : button == ten ? 10 : null);
-        dialog.showAndWait().ifPresent(value -> playHumanCard(ace, value));
+        pendingAceCard = ace;
+        aceOneButton.setDisable(!values.contains(1));
+        aceTenButton.setDisable(!values.contains(10));
+        showOverlay(aceOverlay);
     }
 
     /** Shows non-invasive game screen options without changing turn flow. */
     @FXML
     public void showOptionsMenu() {
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Options");
-        dialog.setHeaderText("Game Options");
-        ButtonType resume = new ButtonType("Resume Game", ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType restart = new ButtonType("Restart Game");
-        ButtonType mainMenu = new ButtonType("Back to Main Menu");
-        ButtonType howToPlay = new ButtonType("How to Play");
-        ButtonType exit = new ButtonType("Exit");
-        dialog.getDialogPane().getButtonTypes().addAll(resume, restart, mainMenu, howToPlay, exit);
-        dialog.getDialogPane().getStyleClass().add("options-dialog");
-        dialog.getDialogPane().getButtonTypes().forEach(buttonType ->
-                dialog.getDialogPane().lookupButton(buttonType).getStyleClass().add("menu-dialog-button"));
+        showOverlay(optionsOverlay);
+    }
 
-        dialog.showAndWait().ifPresent(selection -> {
-            if (selection == restart && confirm("Restart Game", "Restart the current game?", "Restart")) loadStartScreen();
-            else if (selection == mainMenu && confirm("Main Menu", "Return to main menu? Current progress will be lost.", "Main Menu")) loadStartScreen();
-            else if (selection == howToPlay) showHowToPlay();
-            else if (selection == exit && confirm("Exit", "Exit the game?", "Exit")) ((Stage) currentSumLabel.getScene().getWindow()).close();
-        });
+    @FXML
+    public void resumeGame() {
+        hideOverlays();
+    }
+
+    @FXML
+    public void requestRestartGame() {
+        showConfirmation("Restart Game", "Restart the current game?", "Restart", this::loadStartScreen);
+    }
+
+    @FXML
+    public void requestBackToMainMenu() {
+        showConfirmation("Main Menu", "Return to main menu? Current progress will be lost.", "Main Menu", this::loadStartScreen);
+    }
+
+    @FXML
+    public void requestExitGame() {
+        showConfirmation("Exit", "Exit the game?", "Exit", () -> ((Stage) currentSumLabel.getScene().getWindow()).close());
+    }
+
+    @FXML
+    public void showHowToPlayOverlay() {
+        showOverlay(howToPlayOverlay);
+    }
+
+    @FXML
+    public void closeHowToPlayOverlay() {
+        hideOverlays();
+    }
+
+    @FXML
+    public void chooseAceOne() {
+        chooseAceValue(1);
+    }
+
+    @FXML
+    public void chooseAceTen() {
+        chooseAceValue(10);
+    }
+
+    @FXML
+    public void acceptConfirmation() {
+        Runnable action = pendingConfirmationAction;
+        pendingConfirmationAction = null;
+        hideOverlays();
+        if (action != null) action.run();
+    }
+
+    @FXML
+    public void cancelConfirmation() {
+        pendingConfirmationAction = null;
+        hideOverlays();
     }
 
     /** Advances turns, including automatic machine turns and eliminations. */
@@ -317,34 +361,6 @@ public final class GameController {
         appendLog("Winner: " + game.getWinner().getName() + ".");
     }
 
-    private boolean confirm(String title, String message, String confirmText) {
-        ButtonType confirm = new ButtonType(confirmText, ButtonBar.ButtonData.OK_DONE);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, confirm, ButtonType.CANCEL);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.getDialogPane().getStyleClass().add("options-dialog");
-        return alert.showAndWait().filter(confirm::equals).isPresent();
-    }
-
-    private void showHowToPlay() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Keep the table sum at 50 or below.\n\n"
-                        + "On your turn, play one valid card:\n"
-                        + "2-8 add their value.\n"
-                        + "10 adds 10.\n"
-                        + "9 adds 0.\n"
-                        + "J, Q, K subtract 10.\n"
-                        + "A can be 1 or 10.\n\n"
-                        + "After playing, you draw a card.\n"
-                        + "If you have no valid card, you are eliminated.\n"
-                        + "Last player standing wins.",
-                ButtonType.OK);
-        alert.setTitle("How to Play");
-        alert.setHeaderText(null);
-        alert.getDialogPane().getStyleClass().add("options-dialog");
-        alert.showAndWait();
-    }
-
     private void loadStartScreen() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/project/fiftyzo/view/start-view.fxml")));
@@ -379,6 +395,7 @@ public final class GameController {
     private StackPane createDeckView() {
         StackPane view = new StackPane();
         view.getStyleClass().addAll("card", "card-back");
+        view.getStyleClass().add("deck-card");
         view.setPrefSize(CARD_WIDTH, DECK_IMAGE_HEIGHT);
         view.setMinSize(CARD_WIDTH, DECK_IMAGE_HEIGHT);
         ImageView imageView = createImageView(DECK_IMAGE_PATH);
@@ -391,8 +408,27 @@ public final class GameController {
         return view;
     }
 
+    private StackPane createMachineCardView() {
+        StackPane view = new StackPane();
+        view.getStyleClass().addAll("card", "card-back", "machine-card");
+        view.setPrefSize(MACHINE_CARD_WIDTH, MACHINE_CARD_HEIGHT);
+        view.setMinSize(MACHINE_CARD_WIDTH, MACHINE_CARD_HEIGHT);
+        ImageView imageView = createCardBackImageView();
+        if (imageView == null) view.getChildren().add(new Label("50ZO"));
+        else {
+            imageView.setFitWidth(MACHINE_CARD_WIDTH);
+            imageView.setFitHeight(MACHINE_CARD_HEIGHT);
+            view.getChildren().add(imageView);
+        }
+        return view;
+    }
+
     private ImageView createCardImageView(Card card) {
         if (card == null) return null;
+        if (card.isAce()) {
+            ImageView specialAceImage = createSpecialAceImageView(card.getSuit());
+            if (specialAceImage != null) return specialAceImage;
+        }
         ImageView imageView = createImageView(getSpriteSheetPath(card.getSuit()));
         if (imageView == null) return null;
         int rankIndex = getRankIndex(card.getRank());
@@ -406,6 +442,76 @@ public final class GameController {
         imageView.setFitWidth(CARD_WIDTH);
         imageView.setFitHeight(CARD_HEIGHT);
         return imageView;
+    }
+
+    private void chooseAceValue(int value) {
+        if (pendingAceCard == null) {
+            hideOverlays();
+            return;
+        }
+        Card ace = pendingAceCard;
+        pendingAceCard = null;
+        hideOverlays();
+        playHumanCard(ace, value);
+    }
+
+    private void showConfirmation(String title, String message, String confirmText, Runnable action) {
+        confirmTitleLabel.setText(title);
+        confirmMessageLabel.setText(message);
+        confirmAcceptButton.setText(confirmText);
+        confirmCancelButton.setVisible(true);
+        confirmCancelButton.setManaged(true);
+        pendingConfirmationAction = action;
+        showOverlay(confirmOverlay);
+    }
+
+    private void showMessageOverlay(String title, String message) {
+        confirmTitleLabel.setText(title);
+        confirmMessageLabel.setText(message);
+        confirmAcceptButton.setText("OK");
+        confirmCancelButton.setVisible(false);
+        confirmCancelButton.setManaged(false);
+        pendingConfirmationAction = null;
+        showOverlay(confirmOverlay);
+    }
+
+    private void showOverlay(VBox overlay) {
+        hideOverlayPanel(optionsOverlay);
+        hideOverlayPanel(aceOverlay);
+        hideOverlayPanel(confirmOverlay);
+        hideOverlayPanel(howToPlayOverlay);
+        overlayLayer.setVisible(true);
+        overlayLayer.setManaged(true);
+        overlayLayer.setMouseTransparent(false);
+        overlay.setVisible(true);
+        overlay.setManaged(true);
+    }
+
+    private void hideOverlays() {
+        hideOverlayPanel(optionsOverlay);
+        hideOverlayPanel(aceOverlay);
+        hideOverlayPanel(confirmOverlay);
+        hideOverlayPanel(howToPlayOverlay);
+        overlayLayer.setVisible(false);
+        overlayLayer.setManaged(false);
+        overlayLayer.setMouseTransparent(true);
+    }
+
+    private void hideOverlayPanel(VBox overlay) {
+        overlay.setVisible(false);
+        overlay.setManaged(false);
+    }
+
+    private ImageView createSpecialAceImageView(Suit suit) {
+        for (String path : getSpecialAcePaths(suit)) {
+            ImageView imageView = createImageView(path);
+            if (imageView != null) {
+                imageView.setFitWidth(CARD_WIDTH);
+                imageView.setFitHeight(CARD_HEIGHT);
+                return imageView;
+            }
+        }
+        return null;
     }
 
     private ImageView createCardBackImageView() {
@@ -433,6 +539,15 @@ public final class GameController {
             case HEARTS -> CARD_IMAGE_ROOT + "hearts-top-down-88x124.png";
             case CLUBS -> CARD_IMAGE_ROOT + "clubs-top-down-88x124.png";
             case SPADES -> CARD_IMAGE_ROOT + "spades-top-down-88x124.png";
+        };
+    }
+
+    private List<String> getSpecialAcePaths(Suit suit) {
+        return switch (suit) {
+            case CLUBS -> List.of(SPECIAL_CARD_IMAGE_ROOT + "ace-clubs.png", CARD_IMAGE_ROOT + "as-de-trebol.png");
+            case DIAMONDS -> List.of(SPECIAL_CARD_IMAGE_ROOT + "ace-diamonds.png", CARD_IMAGE_ROOT + "as-de-diamante.png");
+            case HEARTS -> List.of(SPECIAL_CARD_IMAGE_ROOT + "ace-hearts.png", CARD_IMAGE_ROOT + "as-de-corazon.png");
+            case SPADES -> List.of(SPECIAL_CARD_IMAGE_ROOT + "ace-spades.png", CARD_IMAGE_ROOT + "as-de-pica.png");
         };
     }
 
@@ -469,5 +584,5 @@ public final class GameController {
         };
     }
     private String suitSymbol(Suit suit) { return switch (suit) { case HEARTS -> "\u2665"; case DIAMONDS -> "\u2666"; case CLUBS -> "\u2663"; case SPADES -> "\u2660"; }; }
-    private void showError(String title, String message) { Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK); alert.setTitle(title); alert.setHeaderText(null); alert.showAndWait(); }
+    private void showError(String title, String message) { showMessageOverlay(title, message); }
 }

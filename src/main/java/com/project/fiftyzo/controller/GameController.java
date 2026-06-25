@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -172,6 +173,30 @@ public final class GameController {
         dialog.showAndWait().ifPresent(value -> playHumanCard(ace, value));
     }
 
+    /** Shows non-invasive game screen options without changing turn flow. */
+    @FXML
+    public void showOptionsMenu() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Options");
+        dialog.setHeaderText("Game Options");
+        ButtonType resume = new ButtonType("Resume Game", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType restart = new ButtonType("Restart Game");
+        ButtonType mainMenu = new ButtonType("Back to Main Menu");
+        ButtonType howToPlay = new ButtonType("How to Play");
+        ButtonType exit = new ButtonType("Exit");
+        dialog.getDialogPane().getButtonTypes().addAll(resume, restart, mainMenu, howToPlay, exit);
+        dialog.getDialogPane().getStyleClass().add("options-dialog");
+        dialog.getDialogPane().getButtonTypes().forEach(buttonType ->
+                dialog.getDialogPane().lookupButton(buttonType).getStyleClass().add("menu-dialog-button"));
+
+        dialog.showAndWait().ifPresent(selection -> {
+            if (selection == restart && confirm("Restart Game", "Restart the current game?", "Restart")) loadStartScreen();
+            else if (selection == mainMenu && confirm("Main Menu", "Return to main menu? Current progress will be lost.", "Main Menu")) loadStartScreen();
+            else if (selection == howToPlay) showHowToPlay();
+            else if (selection == exit && confirm("Exit", "Exit the game?", "Exit")) ((Stage) currentSumLabel.getScene().getWindow()).close();
+        });
+    }
+
     /** Advances turns, including automatic machine turns and eliminations. */
     public void continueTurnFlow() {
         if (game.isGameOver()) {
@@ -290,6 +315,43 @@ public final class GameController {
         gameOverReasonLogged = true;
         appendLog("Game over because only one active player remains.");
         appendLog("Winner: " + game.getWinner().getName() + ".");
+    }
+
+    private boolean confirm(String title, String message, String confirmText) {
+        ButtonType confirm = new ButtonType(confirmText, ButtonBar.ButtonData.OK_DONE);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, confirm, ButtonType.CANCEL);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.getDialogPane().getStyleClass().add("options-dialog");
+        return alert.showAndWait().filter(confirm::equals).isPresent();
+    }
+
+    private void showHowToPlay() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Keep the table sum at 50 or below.\n\n"
+                        + "On your turn, play one valid card:\n"
+                        + "2-8 add their value.\n"
+                        + "10 adds 10.\n"
+                        + "9 adds 0.\n"
+                        + "J, Q, K subtract 10.\n"
+                        + "A can be 1 or 10.\n\n"
+                        + "After playing, you draw a card.\n"
+                        + "If you have no valid card, you are eliminated.\n"
+                        + "Last player standing wins.",
+                ButtonType.OK);
+        alert.setTitle("How to Play");
+        alert.setHeaderText(null);
+        alert.getDialogPane().getStyleClass().add("options-dialog");
+        alert.showAndWait();
+    }
+
+    private void loadStartScreen() {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/project/fiftyzo/view/start-view.fxml")));
+            ((Stage) currentSumLabel.getScene().getWindow()).setScene(FiftyzoApplication.createScene(root));
+        } catch (IOException exception) {
+            throw new IllegalStateException("The start screen could not be loaded.", exception);
+        }
     }
 
     private StackPane createCardView(Card card, boolean faceUp, boolean valid) {

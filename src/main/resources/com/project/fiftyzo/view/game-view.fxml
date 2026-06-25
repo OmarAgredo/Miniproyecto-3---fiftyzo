@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,9 +13,17 @@
         <BorderPane styleClass="game-shell">
             <padding><Insets top="10" right="10" bottom="10" left="10" /></padding>
             <top>
-                <HBox fx:id="machinePlayersContainer" alignment="CENTER" spacing="14" styleClass="machine-container">
+                <BorderPane styleClass="game-top-bar">
+                    <center>
+                        <HBox fx:id="machinePlayersContainer" alignment="CENTER" spacing="14" styleClass="machine-container" />
+                    </center>
+                    <right>
+                        <Button onAction="#showOptionsMenu" text="OPTIONS" styleClass="options-button">
+                            <BorderPane.margin><Insets top="2" right="4" bottom="0" left="10" /></BorderPane.margin>
+                        </Button>
+                    </right>
                     <BorderPane.margin><Insets top="0" right="4" bottom="6" left="4" /></BorderPane.margin>
-                </HBox>
+                </BorderPane>
             </top>
             <center>
                 <VBox alignment="CENTER" spacing="10" styleClass="game-panel">

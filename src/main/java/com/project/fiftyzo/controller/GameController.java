@@ -27,9 +27,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.geometry.Rectangle2D;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -50,6 +54,15 @@ public final class GameController {
     private boolean endScreenShown;
     private boolean gameOverReasonLogged;
     private final List<String> eventMessages = new ArrayList<>();
+    private static final double CARD_WIDTH = 88;
+    private static final double CARD_HEIGHT = 124;
+    private static final double DECK_IMAGE_HEIGHT = 140;
+    private static final double DECK_IMAGE_SCALE = 0.93;
+    private static final double FACE_UP_VIEWPORT_INSET = 3;
+    private static final int SPRITE_COLUMNS = 5;
+    private static final String CARD_IMAGE_ROOT = "/com/project/fiftyzo/images/cards/";
+    private static final String CARD_BACK_PATH = CARD_IMAGE_ROOT + "machine-card-back-red.png";
+    private static final String DECK_IMAGE_PATH = CARD_IMAGE_ROOT + "deck-pile-red.png";
 
     /** Receives a started game from the start controller. */
     public void setGame(Game game) {
@@ -104,8 +117,14 @@ public final class GameController {
     /** Renders the top card and current sum with its risk color. */
     public void renderTable() {
         tableCardContainer.getChildren().clear();
-        tableCardContainer.getChildren().add(new Label("TABLE CARD"));
-        tableCardContainer.getChildren().add(createCardView(game.getTable().getTopCard(), true, false));
+        VBox tableCardGroup = new VBox(12);
+        tableCardGroup.setAlignment(Pos.CENTER);
+        tableCardGroup.getStyleClass().add("table-card-group");
+        tableCardGroup.getChildren().add(new Label("TABLE CARD"));
+        StackPane tableCard = createCardView(game.getTable().getTopCard(), true, false);
+        tableCard.getStyleClass().add("table-card");
+        tableCardGroup.getChildren().add(tableCard);
+        tableCardContainer.getChildren().add(tableCardGroup);
         int sum = game.getTable().getCurrentSum();
         currentSumLabel.setText(String.valueOf(sum));
         currentSumLabel.getStyleClass().removeAll("sum-safe", "sum-warning", "sum-danger");
@@ -116,7 +135,7 @@ public final class GameController {
     public void renderDeck() {
         deckContainer.getChildren().clear();
         deckContainer.getChildren().add(new Label("DECK"));
-        deckContainer.getChildren().add(createCardView(null, false, false));
+        deckContainer.getChildren().add(createDeckView());
         deckContainer.getChildren().add(new Label(game.getDeck().size() + " cards remaining"));
     }
 
@@ -276,19 +295,108 @@ public final class GameController {
     private StackPane createCardView(Card card, boolean faceUp, boolean valid) {
         StackPane view = new StackPane();
         view.getStyleClass().add("card");
-        view.setPrefSize(88, 124);
-        view.setMinSize(88, 124);
+        view.setPrefSize(CARD_WIDTH, CARD_HEIGHT);
+        view.setMinSize(CARD_WIDTH, CARD_HEIGHT);
         if (!faceUp) {
             view.getStyleClass().add("card-back");
-            view.getChildren().add(new Label("50ZO"));
+            ImageView imageView = createCardBackImageView();
+            if (imageView == null) view.getChildren().add(new Label("50ZO"));
+            else view.getChildren().add(imageView);
         } else {
-            VBox content = new VBox(4);
-            content.getStyleClass().add("card-content");
-            content.getChildren().addAll(new Label(rankSymbol(card.getRank())), new Label(suitSymbol(card.getSuit())));
-            view.getChildren().add(content);
+            ImageView imageView = createCardImageView(card);
+            if (imageView == null) view.getChildren().add(createLabelCardContent(card));
+            else {
+                view.getStyleClass().add("card-image");
+                view.getChildren().add(imageView);
+            }
             view.getStyleClass().add(valid ? "card-valid" : "card-invalid");
         }
         return view;
+    }
+
+    private StackPane createDeckView() {
+        StackPane view = new StackPane();
+        view.getStyleClass().addAll("card", "card-back");
+        view.setPrefSize(CARD_WIDTH, DECK_IMAGE_HEIGHT);
+        view.setMinSize(CARD_WIDTH, DECK_IMAGE_HEIGHT);
+        ImageView imageView = createImageView(DECK_IMAGE_PATH);
+        if (imageView == null) view.getChildren().add(new Label("DECK"));
+        else {
+            imageView.setFitWidth(CARD_WIDTH * DECK_IMAGE_SCALE);
+            imageView.setFitHeight(DECK_IMAGE_HEIGHT * DECK_IMAGE_SCALE);
+            view.getChildren().add(imageView);
+        }
+        return view;
+    }
+
+    private ImageView createCardImageView(Card card) {
+        if (card == null) return null;
+        ImageView imageView = createImageView(getSpriteSheetPath(card.getSuit()));
+        if (imageView == null) return null;
+        int rankIndex = getRankIndex(card.getRank());
+        int column = rankIndex % SPRITE_COLUMNS;
+        int row = rankIndex / SPRITE_COLUMNS;
+        imageView.setViewport(new Rectangle2D(
+                column * CARD_WIDTH + FACE_UP_VIEWPORT_INSET,
+                row * CARD_HEIGHT + FACE_UP_VIEWPORT_INSET,
+                CARD_WIDTH - FACE_UP_VIEWPORT_INSET * 2,
+                CARD_HEIGHT - FACE_UP_VIEWPORT_INSET * 2));
+        imageView.setFitWidth(CARD_WIDTH);
+        imageView.setFitHeight(CARD_HEIGHT);
+        return imageView;
+    }
+
+    private ImageView createCardBackImageView() {
+        return createImageView(CARD_BACK_PATH);
+    }
+
+    private ImageView createImageView(String resourcePath) {
+        try {
+            var resource = GameController.class.getResource(resourcePath);
+            if (resource == null) return null;
+            Image image = new Image(resource.toExternalForm());
+            if (image.isError()) return null;
+            ImageView imageView = new ImageView(image);
+            imageView.setPreserveRatio(false);
+            imageView.setSmooth(false);
+            return imageView;
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
+    private String getSpriteSheetPath(Suit suit) {
+        return switch (suit) {
+            case DIAMONDS -> CARD_IMAGE_ROOT + "diamonds-top-down-88x124.png";
+            case HEARTS -> CARD_IMAGE_ROOT + "hearts-top-down-88x124.png";
+            case CLUBS -> CARD_IMAGE_ROOT + "clubs-top-down-88x124.png";
+            case SPADES -> CARD_IMAGE_ROOT + "spades-top-down-88x124.png";
+        };
+    }
+
+    private int getRankIndex(Rank rank) {
+        return switch (rank) {
+            case ACE -> 0;
+            case TWO -> 1;
+            case THREE -> 2;
+            case FOUR -> 3;
+            case FIVE -> 4;
+            case SIX -> 5;
+            case SEVEN -> 6;
+            case EIGHT -> 7;
+            case NINE -> 8;
+            case TEN -> 9;
+            case JACK -> 10;
+            case QUEEN -> 11;
+            case KING -> 12;
+        };
+    }
+
+    private VBox createLabelCardContent(Card card) {
+        VBox content = new VBox(4);
+        content.getStyleClass().add("card-content");
+        content.getChildren().addAll(new Label(rankSymbol(card.getRank())), new Label(suitSymbol(card.getSuit())));
+        return content;
     }
 
     private String formatCard(Card card) { return rankSymbol(card.getRank()) + suitSymbol(card.getSuit()); }

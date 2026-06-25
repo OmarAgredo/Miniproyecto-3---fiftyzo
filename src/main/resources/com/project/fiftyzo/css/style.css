@@ -3,13 +3,39 @@
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
     -fx-text-fill: #F5F7FF;
 }
+.scroll-pane, .scroll-pane > .viewport, .scroll-pane .corner {
+    -fx-background-color: #0B1026;
+}
+.scroll-bar, .scroll-bar .track, .scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: #0B1026;
+}
+.scroll-bar .thumb {
+    -fx-background-color: rgba(0, 229, 255, 0.36);
+    -fx-background-radius: 8;
+}
+.game-scroll, .game-scroll > .viewport {
+    -fx-background-color: linear-gradient(to bottom right, #0B1026, #1A103D 55%, #112A4D);
+}
+.game-scroll .corner {
+    -fx-background-color: #0B1026;
+}
+.game-scroll {
+    -fx-fit-to-width: true;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.game-shell {
+    -fx-background-color: linear-gradient(to bottom right, #0B1026, #1A103D 55%, #112A4D);
+    -fx-min-width: 1000;
+}
 .label { -fx-text-fill: #F5F7FF; }
 .menu-panel, .game-panel, .event-log, .machine-panel, .human-area {
-    -fx-background-color: rgba(26, 16, 61, 0.82);
+    -fx-background-color: rgba(20, 18, 52, 0.78);
     -fx-background-radius: 16;
-    -fx-border-color: rgba(0, 229, 255, 0.48);
+    -fx-border-color: rgba(0, 229, 255, 0.38);
     -fx-border-radius: 16;
-    -fx-effect: dropshadow(gaussian, rgba(0, 229, 255, 0.20), 18, 0.2, 0, 0);
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 229, 255, 0.14), 16, 0.18, 0, 0);
 }
 .title-label { -fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #00E5FF; -fx-effect: dropshadow(gaussian, #FF4FD8, 18, 0.4, 0, 0); }
 .subtitle-label { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #FF4FD8; -fx-letter-spacing: 2px; }
@@ -22,17 +48,20 @@
 }
 .neon-button:hover { -fx-effect: dropshadow(gaussian, #00E5FF, 14, 0.6, 0, 0); }
 .danger-button { -fx-background-color: #FF3B3B; }
-.machine-container { -fx-padding: 8; }
-.machine-panel { -fx-padding: 10; -fx-alignment: center; }
+.machine-container { -fx-padding: 2 0 4 0; }
+.machine-panel { -fx-padding: 8 12 10 12; -fx-alignment: center; }
 .machine-eliminated { -fx-border-color: #FF3B3B; -fx-opacity: 0.58; }
 .sum-title, .log-title, .human-name { -fx-font-weight: bold; -fx-text-fill: #FF4FD8; }
-.sum-safe, .sum-warning, .sum-danger { -fx-font-size: 54px; -fx-font-weight: bold; }
+.sum-safe, .sum-warning, .sum-danger { -fx-font-size: 46px; -fx-font-weight: bold; }
 .sum-safe { -fx-text-fill: #00E5FF; }
 .sum-warning { -fx-text-fill: #FFE66D; }
 .sum-danger { -fx-text-fill: #FF3B3B; }
-.turn-message { -fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #F5F7FF; }
-.event-log { -fx-background-color: rgba(11, 16, 38, 0.92); }
-.event-log .scroll-pane, .event-log .viewport { -fx-background-color: transparent; }
+.turn-message { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #F5F7FF; -fx-padding: 1 0 0 0; }
+.deck-table-row { -fx-padding: 0 0 2 0; }
+.card-slot { -fx-min-width: 124; }
+.event-log { -fx-background-color: rgba(11, 16, 38, 0.90); }
+.event-log .scroll-pane, .event-log .scroll-pane > .viewport, .event-log .scroll-pane .corner { -fx-background-color: transparent; }
+.event-log .scroll-pane { -fx-padding: 4 0 0 0; }
 .log-entry { -fx-text-fill: #C8D0F0; -fx-font-size: 12px; }
 /* Card image assets live on the classpath under:
    /com/project/fiftyzo/images/cards/
@@ -43,10 +72,25 @@
 }
 .card .label { -fx-text-fill: #1A103D; -fx-font-size: 25px; -fx-font-weight: bold; }
 .card-content { -fx-alignment: center; }
+.card-image {
+    -fx-background-color: transparent; -fx-background-radius: 0;
+    -fx-border-radius: 0; -fx-border-width: 0; -fx-padding: 0;
+}
 .card-back { -fx-background-color: linear-gradient(to bottom right, #1A103D, #9B5CFF); -fx-border-color: #00E5FF; }
 .card-back .label { -fx-text-fill: #00E5FF; -fx-font-size: 17px; }
 .card-valid { -fx-cursor: hand; -fx-border-color: #00E5FF; }
+.card-image.card-valid { -fx-border-color: rgba(0, 229, 255, 0.88); -fx-border-width: 1; }
 .card-valid:hover { -fx-translate-y: -10; -fx-effect: dropshadow(gaussian, #00E5FF, 14, 0.5, 0, 0); }
 .card-invalid { -fx-opacity: 0.42; -fx-border-color: #FF3B3B; }
+.card-image.card-invalid { -fx-border-width: 0; }
 .card-selected { -fx-border-color: #FFE66D; -fx-border-width: 4; }
+.table-card-group { -fx-translate-y: -7; }
+.table-card {
+    -fx-scale-x: 1.12; -fx-scale-y: 1.12;
+    -fx-opacity: 1;
+    -fx-border-color: rgba(245, 247, 255, 0.88), rgba(0, 229, 255, 0.72);
+    -fx-border-width: 1, 2; -fx-border-insets: -1, -4;
+    -fx-border-radius: 0; -fx-background-radius: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 229, 255, 0.54), 18, 0.3, 0, 0);
+}
 .winner-label { -fx-font-size: 24px; -fx-text-fill: #FFE66D; }

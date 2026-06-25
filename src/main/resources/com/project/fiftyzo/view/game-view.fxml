@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.fiftyzo.controller.GameController" fitToWidth="true" hbarPolicy="AS_NEEDED" pannable="true" styleClass="game-root game-scroll" vbarPolicy="AS_NEEDED">
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.fiftyzo.controller.GameController" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="game-root game-scroll" vbarPolicy="AS_NEEDED">
     <content>
-        <BorderPane styleClass="game-shell">
+        <BorderPane prefHeight="760" prefWidth="1100" styleClass="game-shell">
             <padding><Insets top="10" right="10" bottom="10" left="10" /></padding>
             <top>
                 <BorderPane styleClass="game-top-bar">

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import java.lang.String?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -18,18 +19,43 @@
                     <children>
                         <VBox alignment="CENTER" spacing="8" styleClass="end-title-block">
                             <children>
-                                <Label fx:id="resultTitleLabel" alignment="CENTER" maxWidth="640" styleClass="title-label end-title-label" textAlignment="CENTER" wrapText="true" />
-                                <Label fx:id="winnerLabel" alignment="CENTER" maxWidth="520" styleClass="winner-label end-winner-label" textAlignment="CENTER" />
+                                <Label fx:id="resultTitleLabel" alignment="CENTER" maxWidth="640" textAlignment="CENTER" wrapText="true">
+                                    <styleClass>
+                                        <String fx:value="end-title-label" />
+                                    </styleClass>
+                                </Label>
+                                <Label fx:id="winnerLabel" alignment="CENTER" maxWidth="520" textAlignment="CENTER">
+                                    <styleClass>
+                                        <String fx:value="end-winner-label" />
+                                    </styleClass>
+                                </Label>
                             </children>
                         </VBox>
 
-                        <VBox alignment="CENTER" maxWidth="560" spacing="12" styleClass="event-log-panel end-log-panel">
+                        <VBox alignment="CENTER" maxWidth="610" spacing="12">
+                            <styleClass>
+                                <String fx:value="event-log-panel" />
+                                <String fx:value="end-log-panel" />
+                            </styleClass>
                             <padding><Insets bottom="18" left="18" right="18" top="18" /></padding>
                             <children>
-                                <Label text="FINAL EVENT LOG" styleClass="subtitle-label event-log-title end-log-title" />
-                                <ScrollPane fitToWidth="true" prefHeight="270" styleClass="event-log-body end-log-body">
+                                <Label text="FINAL EVENT LOG">
+                                    <styleClass>
+                                        <String fx:value="event-log-title" />
+                                        <String fx:value="end-log-title" />
+                                    </styleClass>
+                                </Label>
+                                <ScrollPane fitToWidth="true" prefHeight="280">
+                                    <styleClass>
+                                        <String fx:value="event-log-body" />
+                                        <String fx:value="end-log-scroll" />
+                                    </styleClass>
                                     <content>
-                                        <VBox fx:id="finalLogBox" spacing="8" styleClass="event-log-placeholder end-log-box">
+                                        <VBox fx:id="finalLogBox" spacing="8">
+                                            <styleClass>
+                                                <String fx:value="event-log-placeholder" />
+                                                <String fx:value="end-log-box" />
+                                            </styleClass>
                                             <padding><Insets bottom="8" left="4" right="8" top="8" /></padding>
                                         </VBox>
                                     </content>
@@ -37,14 +63,27 @@
                             </children>
                         </VBox>
 
-                        <HBox alignment="CENTER" spacing="14" styleClass="end-action-row">
+                        <HBox alignment="CENTER" spacing="14" styleClass="end-button-row">
                             <children>
-                                <Button fx:id="playAgainButton" minWidth="180" onAction="#handlePlayAgain" prefWidth="180" text="PLAY AGAIN" styleClass="game-button end-button" />
-                                <Button fx:id="exitButton" minWidth="140" onAction="#handleExit" prefWidth="140" text="EXIT" styleClass="game-button game-button-danger end-button" />
+                                <Button fx:id="playAgainButton" minWidth="180" onAction="#handlePlayAgain" prefWidth="180" text="PLAY AGAIN">
+                                    <styleClass>
+                                        <String fx:value="game-button" />
+                                        <String fx:value="end-button" />
+                                        <String fx:value="end-primary-button" />
+                                    </styleClass>
+                                </Button>
+                                <Button fx:id="exitButton" minWidth="140" onAction="#handleExit" prefWidth="140" text="EXIT">
+                                    <styleClass>
+                                        <String fx:value="game-button" />
+                                        <String fx:value="game-button-danger" />
+                                        <String fx:value="end-button" />
+                                        <String fx:value="end-danger-button" />
+                                    </styleClass>
+                                </Button>
                             </children>
                         </HBox>
 
-                        <Label text="The room resets when you do." styleClass="hint-label end-footer-label" />
+                        <Label text="The room resets when you do." styleClass="end-footer-label" />
                     </children>
                 </VBox>
             </children>

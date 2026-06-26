@@ -61,6 +61,8 @@ public final class EndController {
     public void setResult(Player winner, List<String> finalLog) {
         boolean humanWon = winner instanceof HumanPlayer;
         resultTitleLabel.setText(humanWon ? "YOU ESCAPED THE ROOM" : "THE ROOM KEPT YOU");
+        resultTitleLabel.getStyleClass().removeAll("end-win-title", "end-loss-title");
+        resultTitleLabel.getStyleClass().add(humanWon ? "end-win-title" : "end-loss-title");
         winnerLabel.setText("Winner: " + winner.getName());
         renderFinalLog(finalLog);
     }
@@ -79,7 +81,7 @@ public final class EndController {
     private Label createLogLabel(String message) {
         Label label = new Label(message);
         label.setWrapText(true);
-        label.getStyleClass().add("log-entry");
+        label.getStyleClass().addAll("log-entry", "end-log-entry");
         return label;
     }
 

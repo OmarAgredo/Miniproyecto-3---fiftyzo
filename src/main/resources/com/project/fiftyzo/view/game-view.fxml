@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import java.lang.String?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -15,15 +16,30 @@
             <children>
                 <AnchorPane maxHeight="760" maxWidth="1100" minHeight="760" minWidth="1100" prefHeight="760" prefWidth="1100" styleClass="game-shell">
                     <children>
-                        <VBox fx:id="machineArea" alignment="CENTER" layoutX="70" layoutY="18" minHeight="112" minWidth="720" prefHeight="128" prefWidth="860" styleClass="machine-area editable-game-section" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="18.0">
+                        <VBox fx:id="machineArea" alignment="CENTER" layoutX="70" layoutY="18" minHeight="112" minWidth="720" prefHeight="128" prefWidth="860" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="18.0">
+                            <styleClass>
+                                <String fx:value="machine-area" />
+                                <String fx:value="editable-game-section" />
+                            </styleClass>
                             <children>
                                 <HBox fx:id="machinePlayersContainer" alignment="CENTER" minHeight="112" minWidth="720" prefHeight="128" prefWidth="860" spacing="8" styleClass="machine-container" />
                             </children>
                         </VBox>
 
-                        <Button fx:id="optionsButton" layoutX="983" layoutY="22" onAction="#showOptionsMenu" styleClass="game-button game-button-small options-button" text="OPTIONS" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="22.0" />
+                        <Button fx:id="optionsButton" layoutX="983" layoutY="22" onAction="#showOptionsMenu" text="OPTIONS" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="22.0">
+                            <styleClass>
+                                <String fx:value="game-button" />
+                                <String fx:value="game-button-small" />
+                                <String fx:value="options-button" />
+                            </styleClass>
+                        </Button>
 
-                        <VBox fx:id="centerPlayArea" alignment="CENTER" layoutX="130" layoutY="164" minHeight="360" minWidth="600" prefHeight="386" prefWidth="645" spacing="10" styleClass="game-panel center-play-area editable-game-section" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="325.0" AnchorPane.topAnchor="164.0">
+                        <VBox fx:id="centerPlayArea" alignment="CENTER" layoutX="66" layoutY="164" minHeight="360" minWidth="600" prefHeight="386" prefWidth="645" spacing="10" AnchorPane.leftAnchor="66.0" AnchorPane.rightAnchor="389.0" AnchorPane.topAnchor="164.0">
+                            <styleClass>
+                                <String fx:value="game-panel" />
+                                <String fx:value="center-play-area" />
+                                <String fx:value="editable-game-section" />
+                            </styleClass>
                             <padding><Insets bottom="22" left="30" right="30" top="20" /></padding>
                             <VBox fx:id="sumBlock" alignment="CENTER" spacing="4" styleClass="sum-block">
                                 <children>
@@ -31,16 +47,24 @@
                                     <Label fx:id="currentSumLabel" styleClass="sum-safe" text="0" />
                                 </children>
                             </VBox>
-                            <HBox fx:id="cardPlayRow" alignment="CENTER" spacing="30" styleClass="card-play-row">
+                            <HBox fx:id="cardPlayRow" alignment="TOP_CENTER" spacing="34" styleClass="card-play-row">
                                 <children>
-                                    <VBox fx:id="deckSection" alignment="CENTER" minHeight="180" minWidth="180" prefHeight="192" prefWidth="190" spacing="8" styleClass="card-slot deck-section">
+                                    <VBox fx:id="deckSection" alignment="TOP_CENTER" minHeight="192" minWidth="190" prefHeight="192" prefWidth="190" spacing="8">
+                                        <styleClass>
+                                            <String fx:value="card-slot" />
+                                            <String fx:value="deck-section" />
+                                        </styleClass>
                                         <children>
                                             <Label alignment="CENTER" minWidth="160" prefWidth="180" styleClass="slot-title" text="DECK" textAlignment="CENTER" />
                                             <VBox fx:id="deckContainer" alignment="CENTER" minHeight="140" minWidth="90" prefHeight="140" prefWidth="96" styleClass="dynamic-card-placeholder" />
                                             <Label fx:id="deckCountLabel" alignment="CENTER" minWidth="160" prefWidth="180" styleClass="deck-count" text="0 cards remaining" textAlignment="CENTER" />
                                         </children>
                                     </VBox>
-                                    <VBox fx:id="tableCardSection" alignment="CENTER" minHeight="180" minWidth="180" prefHeight="192" prefWidth="190" spacing="8" styleClass="card-slot table-card-section">
+                                    <VBox fx:id="tableCardSection" alignment="TOP_CENTER" minHeight="192" minWidth="190" prefHeight="192" prefWidth="190" spacing="8">
+                                        <styleClass>
+                                            <String fx:value="card-slot" />
+                                            <String fx:value="table-card-section" />
+                                        </styleClass>
                                         <children>
                                             <Label alignment="CENTER" minWidth="160" prefWidth="180" styleClass="slot-title" text="TABLE CARD" textAlignment="CENTER" />
                                             <VBox fx:id="tableCardContainer" alignment="CENTER" minHeight="140" minWidth="96" prefHeight="140" prefWidth="106" styleClass="dynamic-card-placeholder" />
@@ -51,16 +75,29 @@
                             <Label fx:id="turnMessageLabel" alignment="CENTER" maxWidth="520" styleClass="turn-message" text="" textAlignment="CENTER" wrapText="true" />
                         </VBox>
 
-                        <VBox fx:id="eventLogPanel" layoutX="792" layoutY="170" minHeight="350" minWidth="270" prefHeight="368" prefWidth="286" spacing="12" styleClass="event-log-panel editable-game-section" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="170.0">
+                        <VBox fx:id="eventLogPanel" layoutX="752" layoutY="170" minHeight="350" minWidth="270" prefHeight="368" prefWidth="286" spacing="12" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="170.0">
+                            <styleClass>
+                                <String fx:value="event-log-panel" />
+                                <String fx:value="editable-game-section" />
+                            </styleClass>
                             <padding><Insets bottom="18" left="16" right="16" top="18" /></padding>
-                            <Label fx:id="eventLogTitle" styleClass="log-title event-log-title" text="EVENT LOG" />
+                            <Label fx:id="eventLogTitle" text="EVENT LOG">
+                                <styleClass>
+                                    <String fx:value="log-title" />
+                                    <String fx:value="event-log-title" />
+                                </styleClass>
+                            </Label>
                             <ScrollPane fx:id="eventLogScrollPane" fitToWidth="true" styleClass="event-log-body" VBox.vgrow="ALWAYS">
                                 <content><VBox fx:id="eventLogBox" minHeight="280" prefHeight="300" spacing="8" styleClass="event-log-placeholder" /></content>
                             </ScrollPane>
                         </VBox>
 
-                        <VBox fx:id="humanHandPanel" alignment="CENTER" layoutX="42" layoutY="562" minHeight="160" minWidth="960" prefHeight="172" prefWidth="1016" spacing="14" styleClass="human-hand-area editable-game-section" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="42.0">
-                            <padding><Insets bottom="14" left="22" right="22" top="10" /></padding>
+                        <VBox fx:id="humanHandPanel" alignment="CENTER" layoutX="54" layoutY="558" minHeight="160" minWidth="940" prefHeight="172" prefWidth="992" spacing="8" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="54.0">
+                            <styleClass>
+                                <String fx:value="human-hand-area" />
+                                <String fx:value="editable-game-section" />
+                            </styleClass>
+                            <padding><Insets bottom="10" left="24" right="24" top="8" /></padding>
                             <Label fx:id="humanNameLabel" styleClass="human-name" text="HUMAN PLAYER HAND" />
                             <HBox fx:id="humanHandContainer" alignment="CENTER" minHeight="124" prefHeight="124" prefWidth="920" spacing="9" styleClass="human-hand-placeholder" />
                         </VBox>
@@ -71,44 +108,60 @@
                     <children>
                         <StackPane fx:id="overlayBackdrop" styleClass="overlay-backdrop" />
 
-                        <VBox fx:id="optionsModal" alignment="CENTER" managed="false" maxHeight="380" maxWidth="420" minHeight="340" minWidth="380" prefHeight="360" prefWidth="410" spacing="12" styleClass="overlay-modal options-modal" visible="false">
+                        <VBox fx:id="optionsModal" alignment="CENTER" managed="false" maxHeight="380" maxWidth="420" minHeight="340" minWidth="380" prefHeight="360" prefWidth="410" spacing="12" visible="false">
+                            <styleClass>
+                                <String fx:value="overlay-modal" />
+                                <String fx:value="options-modal" />
+                            </styleClass>
                             <padding><Insets bottom="30" left="34" right="34" top="28" /></padding>
                             <Label styleClass="overlay-title" text="OPTIONS" />
-                            <Button maxWidth="250" minWidth="250" onAction="#resumeGame" prefWidth="250" styleClass="game-button overlay-button" text="Resume" />
-                            <Button maxWidth="250" minWidth="250" onAction="#requestRestartGame" prefWidth="250" styleClass="game-button overlay-button" text="Restart Game" />
-                            <Button maxWidth="250" minWidth="250" onAction="#requestBackToMainMenu" prefWidth="250" styleClass="game-button overlay-button" text="Back to Main Menu" />
-                            <Button maxWidth="250" minWidth="250" onAction="#showHowToPlayOverlay" prefWidth="250" styleClass="game-button overlay-button" text="How to Play" />
-                            <Button maxWidth="250" minWidth="250" onAction="#requestExitGame" prefWidth="250" styleClass="game-button game-button-danger overlay-button" text="Exit" />
+                            <Button maxWidth="250" minWidth="250" onAction="#resumeGame" prefWidth="250" text="Resume"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /></styleClass></Button>
+                            <Button maxWidth="250" minWidth="250" onAction="#requestRestartGame" prefWidth="250" text="Restart Game"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /></styleClass></Button>
+                            <Button maxWidth="250" minWidth="250" onAction="#requestBackToMainMenu" prefWidth="250" text="Back to Main Menu"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /></styleClass></Button>
+                            <Button maxWidth="250" minWidth="250" onAction="#showHowToPlayOverlay" prefWidth="250" text="How to Play"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /></styleClass></Button>
+                            <Button maxWidth="250" minWidth="250" onAction="#requestExitGame" prefWidth="250" text="Exit"><styleClass><String fx:value="game-button" /><String fx:value="game-button-danger" /><String fx:value="overlay-button" /></styleClass></Button>
                         </VBox>
 
-                        <VBox fx:id="aceModal" alignment="CENTER" managed="false" maxHeight="240" maxWidth="340" minHeight="210" minWidth="300" prefHeight="220" prefWidth="320" spacing="16" styleClass="overlay-modal ace-modal" visible="false">
+                        <VBox fx:id="aceModal" alignment="CENTER" managed="false" maxHeight="240" maxWidth="340" minHeight="210" minWidth="300" prefHeight="220" prefWidth="320" spacing="16" visible="false">
+                            <styleClass>
+                                <String fx:value="overlay-modal" />
+                                <String fx:value="ace-modal" />
+                            </styleClass>
                             <padding><Insets bottom="28" left="30" right="30" top="26" /></padding>
                             <Label styleClass="overlay-title" text="Choose Ace value" />
                             <HBox alignment="CENTER" spacing="16">
                                 <children>
-                                    <Button fx:id="aceOneButton" minWidth="90" onAction="#chooseAceOne" styleClass="game-button overlay-button ace-choice-button" text="1" />
-                                    <Button fx:id="aceTenButton" minWidth="90" onAction="#chooseAceTen" styleClass="game-button overlay-button ace-choice-button" text="10" />
+                                    <Button fx:id="aceOneButton" minWidth="90" onAction="#chooseAceOne" text="1"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /><String fx:value="ace-choice-button" /></styleClass></Button>
+                                    <Button fx:id="aceTenButton" minWidth="90" onAction="#chooseAceTen" text="10"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /><String fx:value="ace-choice-button" /></styleClass></Button>
                                 </children>
                             </HBox>
                         </VBox>
 
-                        <VBox fx:id="confirmModal" alignment="CENTER" managed="false" maxHeight="310" maxWidth="430" minHeight="250" minWidth="360" prefHeight="280" prefWidth="410" spacing="14" styleClass="overlay-modal confirm-modal" visible="false">
+                        <VBox fx:id="confirmModal" alignment="CENTER" managed="false" maxHeight="310" maxWidth="430" minHeight="250" minWidth="360" prefHeight="280" prefWidth="410" spacing="14" visible="false">
+                            <styleClass>
+                                <String fx:value="overlay-modal" />
+                                <String fx:value="confirm-modal" />
+                            </styleClass>
                             <padding><Insets bottom="28" left="30" right="30" top="26" /></padding>
                             <Label fx:id="confirmTitleLabel" styleClass="overlay-title" text="Confirm" />
                             <Label fx:id="confirmMessageLabel" alignment="CENTER" maxWidth="320" styleClass="overlay-body" text="" textAlignment="CENTER" wrapText="true" />
                             <HBox alignment="CENTER" spacing="14">
                                 <children>
-                                    <Button fx:id="confirmAcceptButton" minWidth="120" onAction="#acceptConfirmation" styleClass="game-button overlay-button" text="Confirm" />
-                                    <Button fx:id="confirmCancelButton" minWidth="120" onAction="#cancelConfirmation" styleClass="game-button overlay-button secondary-button" text="Cancel" />
+                                    <Button fx:id="confirmAcceptButton" minWidth="120" onAction="#acceptConfirmation" text="Confirm"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /></styleClass></Button>
+                                    <Button fx:id="confirmCancelButton" minWidth="120" onAction="#cancelConfirmation" text="Cancel"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /><String fx:value="secondary-button" /></styleClass></Button>
                                 </children>
                             </HBox>
                         </VBox>
 
-                        <VBox fx:id="howToPlayModal" alignment="CENTER" managed="false" maxHeight="460" maxWidth="540" minHeight="390" minWidth="480" prefHeight="430" prefWidth="520" spacing="14" styleClass="overlay-modal how-to-play-modal" visible="false">
+                        <VBox fx:id="howToPlayModal" alignment="CENTER" managed="false" maxHeight="460" maxWidth="540" minHeight="390" minWidth="480" prefHeight="430" prefWidth="520" spacing="14" visible="false">
+                            <styleClass>
+                                <String fx:value="overlay-modal" />
+                                <String fx:value="how-to-play-modal" />
+                            </styleClass>
                             <padding><Insets bottom="28" left="34" right="34" top="26" /></padding>
                             <Label styleClass="overlay-title" text="How to Play" />
                             <Label styleClass="overlay-body" text="Keep the table sum at 50 or below.&#10;&#10;On your turn, play one valid card:&#10;2-8 add their value.&#10;10 adds 10.&#10;9 adds 0.&#10;J, Q, K subtract 10.&#10;A can be 1 or 10.&#10;&#10;After playing, you draw a card. If you have no valid card, you are eliminated. Last player standing wins." wrapText="true" />
-                            <Button minWidth="160" onAction="#closeHowToPlayOverlay" styleClass="game-button overlay-button" text="Close" />
+                            <Button minWidth="160" onAction="#closeHowToPlayOverlay" text="Close"><styleClass><String fx:value="game-button" /><String fx:value="overlay-button" /></styleClass></Button>
                         </VBox>
                     </children>
                 </StackPane>

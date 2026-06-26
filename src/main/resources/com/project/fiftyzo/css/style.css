@@ -62,6 +62,247 @@
     -fx-background-insets: 0;
 }
 
+/* Start screen */
+.start-root {
+    -fx-background-color: #081418;
+    -fx-alignment: center;
+}
+.start-canvas {
+    -fx-background-color: #081418;
+    -fx-background-image: url("../images/backgrounds/background-main.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-min-width: 1100;
+    -fx-min-height: 760;
+    -fx-pref-width: 1100;
+    -fx-pref-height: 760;
+    -fx-max-width: 1100;
+    -fx-max-height: 760;
+}
+.start-scrim {
+    -fx-background-color: linear-gradient(to bottom, rgba(3, 6, 7, 0.14), rgba(7, 15, 16, 0.26), rgba(3, 6, 7, 0.50));
+}
+.start-menu-shell {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+}
+.start-title-block {
+    -fx-alignment: center;
+    -fx-spacing: 7;
+}
+.start-title-label,
+.label.start-title-label {
+    -fx-font-family: "Arcade Raiders", "Hey Comic", "Segoe UI", sans-serif;
+    -fx-font-size: 96px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F3E9C9;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.42), 26, 0.34, 0, 0);
+}
+.start-subtitle-label,
+.label.start-subtitle-label {
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #EEE7D2;
+    -fx-effect: dropshadow(gaussian, #11130C, 5, 0.48, 0, 1);
+}
+.start-menu-panel {
+    -fx-background-color: linear-gradient(to bottom, rgba(18, 30, 25, 0.90), rgba(7, 15, 16, 0.94));
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(243, 233, 201, 0.34), rgba(184, 255, 106, 0.52);
+    -fx-border-radius: 20;
+    -fx-border-width: 1, 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.18), 24, 0.24, 0, 0);
+}
+.start-field-label,
+.label.start-field-label {
+    -fx-font-family: "Arcade Raiders", "Hey Comic", "Segoe UI", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F3E9C9;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.20), 8, 0.28, 0, 0);
+}
+.start-instruction-label,
+.label.start-instruction-label {
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #D8D0B8;
+    -fx-line-spacing: 3;
+}
+.start-footer-label,
+.label.start-footer-label {
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(243, 233, 201, 0.72);
+    -fx-effect: dropshadow(gaussian, #11130C, 4, 0.38, 0, 1);
+}
+.start-button,
+.button.start-button {
+    -fx-min-height: 44;
+    -fx-font-size: 15px;
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFF8D8;
+    -fx-padding: 11 24 11 24;
+    -fx-background-color: linear-gradient(to bottom, rgba(52, 64, 33, 0.98), rgba(9, 22, 22, 0.98));
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255, 248, 216, 0.62), rgba(184, 255, 106, 0.70);
+    -fx-border-insets: 0;
+    -fx-border-radius: 12;
+    -fx-border-width: 1, 1.5;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.30), 16, 0.32, 0, 0);
+}
+.start-button:hover,
+.button.start-button:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(72, 88, 42, 0.98), rgba(12, 28, 25, 0.98));
+    -fx-border-color: rgba(255, 248, 216, 0.82), rgba(184, 255, 106, 0.92);
+    -fx-text-fill: #FFF8D8;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.48), 20, 0.38, 0, 0);
+}
+.start-button:pressed,
+.button.start-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, rgba(13, 24, 18, 0.98), rgba(5, 13, 15, 0.98));
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.62), 7, 0.28, 0, 2);
+}
+.start-combo,
+.combo-box.start-combo {
+    -fx-background-color: linear-gradient(to bottom, rgba(24, 35, 24, 0.96), rgba(7, 17, 18, 0.98));
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(243, 233, 201, 0.48), rgba(184, 255, 106, 0.48);
+    -fx-border-insets: 0;
+    -fx-border-radius: 12;
+    -fx-border-width: 1, 1;
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-min-height: 40;
+    -fx-pref-height: 40;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.58), 10, 0.30, 0, 2);
+}
+.start-combo:hover,
+.start-combo:showing,
+.combo-box.start-combo:hover,
+.combo-box.start-combo:showing {
+    -fx-background-color: linear-gradient(to bottom, rgba(35, 49, 29, 0.98), rgba(8, 20, 24, 0.98));
+    -fx-border-color: rgba(255, 248, 216, 0.70), rgba(184, 255, 106, 0.74);
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.26), 14, 0.30, 0, 0);
+}
+.start-combo .list-cell {
+    -fx-background-color: transparent;
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-text-fill: #F3E9C9;
+    -fx-padding: 9 12 9 14;
+}
+.start-combo > .list-cell {
+    -fx-text-fill: #FFF8D8;
+}
+.start-combo .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 12 12 0;
+    -fx-padding: 0 12 0 8;
+}
+.start-combo .arrow {
+    -fx-background-color: #D8F38A;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.42), 8, 0.36, 0, 0);
+}
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(7, 15, 16, 0.98);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(243, 233, 201, 0.34), rgba(184, 255, 106, 0.54);
+    -fx-border-radius: 12;
+    -fx-border-width: 1, 1;
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.68), 14, 0.32, 0, 3);
+}
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: rgba(7, 15, 16, 0.98);
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-text-fill: #F3E9C9;
+    -fx-padding: 9 14 9 14;
+}
+.combo-box-popup .list-view .list-cell:hover,
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(54, 69, 31, 0.98);
+    -fx-text-fill: #FFF8D8;
+}
+
+/* End screen */
+.end-root {
+    -fx-background-color: #081418;
+    -fx-alignment: center;
+}
+.end-canvas {
+    -fx-background-color: #081418;
+    -fx-background-image: url("../images/backgrounds/background-main.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-min-width: 1100;
+    -fx-min-height: 760;
+    -fx-pref-width: 1100;
+    -fx-pref-height: 760;
+    -fx-max-width: 1100;
+    -fx-max-height: 760;
+}
+.end-scrim {
+    -fx-background-color: linear-gradient(to bottom, rgba(3, 6, 7, 0.22), rgba(3, 6, 7, 0.46));
+}
+.end-screen-shell {
+    -fx-alignment: center;
+}
+.end-title-block {
+    -fx-alignment: center;
+}
+.end-title-label {
+    -fx-font-family: "Arcade Raiders", "Hey Comic", "Segoe UI", sans-serif;
+    -fx-font-size: 40px;
+    -fx-text-fill: #F3E9C9;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.30), 18, 0.32, 0, 0);
+}
+.end-winner-label {
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #D8F38A;
+    -fx-effect: dropshadow(gaussian, #11130C, 5, 0.48, 0, 1);
+}
+.end-log-panel {
+    -fx-background-color: linear-gradient(to bottom, rgba(12, 24, 23, 0.84), rgba(7, 15, 16, 0.92));
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(243, 233, 201, 0.28), rgba(184, 255, 106, 0.42);
+    -fx-border-radius: 18;
+    -fx-border-width: 1, 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.62), 20, 0.30, 0, 4);
+}
+.end-log-title {
+    -fx-font-family: "Arcade Raiders", "Hey Comic", "Segoe UI", sans-serif;
+    -fx-font-size: 16px;
+    -fx-text-fill: #F3E9C9;
+}
+.end-log-body {
+    -fx-background-color: rgba(8, 20, 24, 0.18);
+    -fx-background-radius: 10;
+}
+.end-log-box {
+    -fx-padding: 8 8 8 4;
+}
+.end-action-row {
+    -fx-alignment: center;
+}
+.end-button {
+    -fx-min-height: 40;
+}
+.end-footer-label {
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #C9C3A4;
+}
+
 /* Typography */
 .title-label {
     -fx-font-size: 52px;
@@ -99,28 +340,28 @@
 
 /* Buttons */
 .game-button {
-    -fx-background-color: linear-gradient(to bottom, rgba(23, 34, 22, 0.94), rgba(8, 20, 24, 0.95));
+    -fx-background-color: linear-gradient(to bottom, rgba(36, 42, 24, 0.94), rgba(8, 20, 24, 0.96));
     -fx-background-insets: 0;
-    -fx-background-radius: 13;
-    -fx-border-color: rgba(216, 243, 138, 0.72);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(243, 233, 201, 0.52), rgba(184, 255, 106, 0.36);
     -fx-border-insets: 0;
-    -fx-border-radius: 13;
-    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+    -fx-border-width: 1, 1;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #F3E9C9;
-    -fx-padding: 8 16 8 16;
+    -fx-padding: 9 18 9 18;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.18), 10, 0.24, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.56), 8, 0.30, 0, 2);
 }
 .game-button:hover {
-    -fx-background-color: linear-gradient(to bottom, rgba(54, 69, 31, 0.96), rgba(11, 22, 24, 0.98));
-    -fx-border-color: #B8FF6A;
+    -fx-background-color: linear-gradient(to bottom, rgba(56, 70, 34, 0.96), rgba(12, 28, 25, 0.98));
+    -fx-border-color: rgba(255, 248, 216, 0.72), rgba(184, 255, 106, 0.70);
     -fx-text-fill: #FFF8D8;
-    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.42), 14, 0.34, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.34), 14, 0.32, 0, 0);
 }
 .game-button:focused {
     -fx-background-insets: 0;
@@ -130,8 +371,9 @@
 }
 .game-button:pressed {
     -fx-translate-y: 1;
-    -fx-background-color: rgba(8, 20, 24, 0.98);
-    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.14), 6, 0.18, 0, 0);
+    -fx-background-color: linear-gradient(to bottom, rgba(10, 18, 15, 0.98), rgba(5, 13, 15, 0.98));
+    -fx-border-color: rgba(201, 195, 164, 0.48), rgba(184, 255, 106, 0.34);
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.60), 5, 0.28, 0, 1);
 }
 .game-button:disabled {
     -fx-opacity: 0.42;
@@ -142,20 +384,22 @@
     -fx-padding: 8 16 8 16;
 }
 .game-button-danger {
-    -fx-background-color: linear-gradient(to bottom, rgba(92, 28, 28, 0.96), rgba(38, 10, 12, 0.96));
-    -fx-border-color: rgba(255, 107, 95, 0.78);
+    -fx-background-color: linear-gradient(to bottom, rgba(77, 28, 31, 0.95), rgba(30, 11, 13, 0.96));
+    -fx-border-color: rgba(243, 233, 201, 0.42), rgba(255, 107, 95, 0.58);
 }
 .game-button-danger:hover {
-    -fx-background-color: linear-gradient(to bottom, rgba(118, 35, 35, 0.98), rgba(52, 13, 16, 0.98));
-    -fx-border-color: #FF6B5F;
+    -fx-background-color: linear-gradient(to bottom, rgba(96, 34, 39, 0.98), rgba(43, 13, 16, 0.98));
+    -fx-border-color: rgba(255, 248, 216, 0.58), rgba(255, 107, 95, 0.80);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 95, 0.24), 12, 0.30, 0, 0);
 }
 .overlay-button {
-    -fx-min-height: 34;
+    -fx-min-height: 36;
+    -fx-pref-width: 250;
 }
 .options-button {
-    -fx-background-color: rgba(8, 20, 24, 0.88);
-    -fx-border-color: rgba(216, 243, 138, 0.78);
-    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.26), 12, 0.30, 0, 0);
+    -fx-background-color: linear-gradient(to bottom, rgba(29, 36, 22, 0.92), rgba(8, 20, 24, 0.96));
+    -fx-border-color: rgba(243, 233, 201, 0.52), rgba(184, 255, 106, 0.44);
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.22), 12, 0.28, 0, 0);
 }
 .secondary-button {
     -fx-border-color: rgba(201, 195, 164, 0.58);
@@ -175,37 +419,49 @@
 .game-panel,
 .event-log-panel,
 .overlay-modal {
-    -fx-background-color: rgba(8, 20, 24, 0.76);
+    -fx-background-color: linear-gradient(to bottom, rgba(12, 24, 23, 0.80), rgba(7, 15, 16, 0.86));
     -fx-background-radius: 14;
-    -fx-border-color: rgba(198, 255, 126, 0.50);
+    -fx-border-color: rgba(243, 233, 201, 0.24), rgba(198, 255, 126, 0.38);
     -fx-border-radius: 14;
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 18, 0.22, 0, 0);
+    -fx-border-width: 1, 1;
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.58), 18, 0.28, 0, 3);
 }
 .game-panel {
-    -fx-background-color: rgba(8, 20, 24, 0.76);
+    -fx-background-color: linear-gradient(to bottom, rgba(12, 24, 23, 0.76), rgba(7, 15, 16, 0.82));
 }
 .center-play-area {
     -fx-alignment: center;
+    -fx-spacing: 10;
 }
 .event-log-panel {
-    -fx-background-color: linear-gradient(to bottom, rgba(8, 20, 24, 0.78), rgba(10, 18, 15, 0.88));
+    -fx-background-color: linear-gradient(to bottom, rgba(12, 24, 23, 0.82), rgba(8, 14, 13, 0.90));
     -fx-background-radius: 18;
-    -fx-border-color: rgba(216, 243, 138, 0.48);
+    -fx-border-color: rgba(243, 233, 201, 0.24), rgba(216, 243, 138, 0.38);
     -fx-border-radius: 18;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 20, 0.24, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.56), 18, 0.28, 0, 3);
 }
 .human-hand-area {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-effect: none;
+    -fx-spacing: 13;
 }
-.machine-slot {
-    -fx-padding: 4 6 6 6;
+.machine-area {
     -fx-alignment: center;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.52), 5, 0.35, 0, 1);
+    -fx-effect: none;
+}
+.machine-slot,
+.machine-player-slot {
+    -fx-padding: 5 7 6 7;
+    -fx-alignment: center;
+    -fx-background-color: rgba(8, 20, 24, 0.36);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(243, 233, 201, 0.16);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.48), 7, 0.32, 0, 1);
 }
 .machine-eliminated {
     -fx-border-color: #FF6B5F;
@@ -218,15 +474,15 @@
     -fx-alignment: center;
 }
 .overlay-backdrop {
-    -fx-background-color: rgba(3, 6, 7, 0.72);
+    -fx-background-color: rgba(3, 6, 7, 0.76);
 }
 .overlay-modal {
-    -fx-background-color: rgba(8, 20, 24, 0.94);
+    -fx-background-color: linear-gradient(to bottom, rgba(12, 24, 23, 0.96), rgba(6, 14, 15, 0.98));
     -fx-background-radius: 18;
-    -fx-border-color: rgba(216, 243, 138, 0.78);
+    -fx-border-color: rgba(243, 233, 201, 0.34), rgba(184, 255, 106, 0.48);
     -fx-border-radius: 18;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.30), 24, 0.28, 0, 0);
+    -fx-border-width: 1, 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.22), 22, 0.25, 0, 0);
 }
 .options-modal {
     -fx-padding: 28 34 30 34;
@@ -236,18 +492,27 @@
 .how-to-play-modal {
     -fx-padding: 26 30 28 30;
 }
+.ace-modal {
+    -fx-spacing: 16;
+}
+.confirm-modal {
+    -fx-spacing: 14;
+}
+.how-to-play-modal {
+    -fx-spacing: 14;
+}
 .overlay-title {
     -fx-font-family: "Arcade Raiders", "Hey Comic", "Segoe UI", sans-serif;
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: #F3E9C9;
-    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.30), 12, 0.30, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.24), 10, 0.28, 0, 0);
 }
 .overlay-body {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 14px;
-    -fx-text-fill: #E8E6D6;
-    -fx-line-spacing: 3;
+    -fx-text-fill: #EEE7D2;
+    -fx-line-spacing: 4;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.44, 0, 1);
 }
 
@@ -262,10 +527,13 @@
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-text-fill: #F6F0DD;
+    -fx-text-fill: #F3E9C9;
+    -fx-padding: 0 0 1 0;
 }
-.machine-hand {
+.machine-hand,
+.machine-card-row {
     -fx-alignment: center;
+    -fx-spacing: 3;
 }
 
 /* Table and hand areas */
@@ -273,7 +541,7 @@
 .sum-warning,
 .sum-danger {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
-    -fx-font-size: 50px;
+    -fx-font-size: 52px;
     -fx-font-weight: bold;
 }
 .sum-safe {
@@ -293,11 +561,15 @@
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #F6F0DD;
-    -fx-padding: 1 0 0 0;
+    -fx-padding: 4 0 0 0;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.44, 0, 1);
 }
-.deck-table-row {
-    -fx-padding: 2 0 7 0;
+.sum-block {
+    -fx-alignment: center;
+    -fx-spacing: 1;
+}
+.card-play-row {
+    -fx-padding: 0 0 6 0;
 }
 .card-slot {
     -fx-min-width: 170;
@@ -306,11 +578,16 @@
     -fx-border-color: transparent;
     -fx-effect: none;
 }
+.deck-section,
+.table-card-section {
+    -fx-alignment: center;
+    -fx-spacing: 8;
+}
 .slot-title {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #C9C3A4;
+    -fx-text-fill: #D8F38A;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.42, 0, 1);
 }
 .deck-count {
@@ -327,6 +604,10 @@
 }
 .human-hand-placeholder {
     -fx-alignment: center;
+    -fx-spacing: 9;
+}
+.human-name {
+    -fx-padding: 0 0 2 0;
 }
 
 /* Event log */
@@ -336,19 +617,19 @@
     -fx-background-color: transparent;
 }
 .event-log-panel .scroll-pane {
-    -fx-padding: 2 0 0 0;
+    -fx-padding: 6 4 0 0;
     -fx-background-insets: 0;
 }
 .event-log-panel .scroll-bar:vertical {
     -fx-background-color: transparent;
-    -fx-pref-width: 8;
+    -fx-pref-width: 9;
 }
 .event-log-panel .scroll-bar:vertical .track {
-    -fx-background-color: rgba(8, 20, 24, 0.24);
+    -fx-background-color: rgba(8, 20, 24, 0.34);
     -fx-background-radius: 8;
 }
 .event-log-panel .scroll-bar:vertical .thumb {
-    -fx-background-color: rgba(216, 243, 138, 0.34);
+    -fx-background-color: rgba(216, 243, 138, 0.40);
     -fx-background-radius: 8;
 }
 .event-log-panel .scroll-bar:vertical .increment-button,
@@ -357,12 +638,23 @@
     -fx-padding: 0;
 }
 .event-log-placeholder {
-    -fx-padding: 0 2 0 0;
+    -fx-padding: 2 4 4 0;
+}
+.event-log-title {
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 4 0;
+    -fx-border-color: transparent transparent rgba(243, 233, 201, 0.18) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.event-log-body {
+    -fx-background-color: transparent;
 }
 .log-entry {
     -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
-    -fx-text-fill: #E8E6D6;
+    -fx-text-fill: #EEE7D2;
     -fx-font-size: 12px;
+    -fx-line-spacing: 2;
+    -fx-padding: 0 2 2 0;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.42, 0, 1);
 }
 
@@ -373,11 +665,11 @@
 .card {
     -fx-background-color: #F5F7FF;
     -fx-background-radius: 10;
-    -fx-border-color: rgba(216, 243, 138, 0.78);
+    -fx-border-color: rgba(243, 233, 201, 0.46);
     -fx-border-radius: 10;
-    -fx-border-width: 2;
+    -fx-border-width: 1.5;
     -fx-alignment: center;
-    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.28), 12, 0.28, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.42), 8, 0.28, 0, 2);
 }
 .card .label {
     -fx-text-fill: #1A103D;
@@ -390,16 +682,16 @@
 .card-image {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
-    -fx-border-color: rgba(216, 243, 138, 0.76);
+    -fx-border-color: rgba(243, 233, 201, 0.36);
     -fx-border-radius: 3;
-    -fx-border-width: 2;
+    -fx-border-width: 1;
     -fx-padding: 0;
-    -fx-effect: dropshadow(gaussian, rgba(198, 255, 126, 0.24), 10, 0.24, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.38), 8, 0.28, 0, 2);
 }
 .card-back {
     -fx-background-color: linear-gradient(to bottom right, #081418, #21301B);
-    -fx-border-color: rgba(216, 243, 138, 0.56);
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.18), 9, 0.22, 0, 0);
+    -fx-border-color: rgba(216, 243, 138, 0.42);
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.14), 9, 0.22, 0, 0);
 }
 .card-back .label {
     -fx-text-fill: #B8FF6A;
@@ -407,24 +699,24 @@
 }
 .card-valid {
     -fx-cursor: hand;
-    -fx-border-color: #B8FF6A;
-    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.42), 14, 0.36, 0, 0);
+    -fx-border-color: rgba(184, 255, 106, 0.78);
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.34), 13, 0.34, 0, 0);
 }
 .card-image.card-valid {
-    -fx-border-color: #B8FF6A;
-    -fx-border-width: 2;
+    -fx-border-color: rgba(184, 255, 106, 0.76);
+    -fx-border-width: 1.5;
 }
 .card-valid:hover {
     -fx-translate-y: -10;
-    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.68), 18, 0.44, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(184, 255, 106, 0.52), 18, 0.42, 0, 0);
 }
 .card-invalid {
-    -fx-opacity: 0.42;
-    -fx-border-color: rgba(255, 107, 95, 0.70);
-    -fx-effect: dropshadow(gaussian, rgba(255, 107, 95, 0.16), 8, 0.18, 0, 0);
+    -fx-opacity: 0.48;
+    -fx-border-color: rgba(201, 195, 164, 0.26);
+    -fx-effect: dropshadow(gaussian, rgba(17, 19, 12, 0.34), 6, 0.22, 0, 1);
 }
 .card-image.card-invalid {
-    -fx-border-color: rgba(255, 107, 95, 0.62);
+    -fx-border-color: rgba(201, 195, 164, 0.24);
     -fx-border-width: 1;
 }
 .card-selected {
@@ -437,7 +729,7 @@
     -fx-background-radius: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.22), 12, 0.24, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.20), 11, 0.24, 0, 0);
 }
 .deck-card .label {
     -fx-text-fill: #B8FF6A;
@@ -447,10 +739,10 @@
     -fx-alignment: center;
     -fx-background-color: transparent;
     -fx-background-radius: 7;
-    -fx-border-color: rgba(216, 243, 138, 0.42);
+    -fx-border-color: rgba(243, 233, 201, 0.30);
     -fx-border-radius: 7;
     -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.16), 7, 0.20, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.14), 7, 0.20, 0, 0);
 }
 .machine-card-back .label {
     -fx-text-fill: #B8FF6A;
@@ -465,7 +757,7 @@
     -fx-border-insets: 0;
     -fx-background-color: transparent;
     -fx-background-radius: 0;
-    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.36), 18, 0.28, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.28), 16, 0.26, 0, 0);
 }
 .table-card.card-invalid,
 .table-card.card-image {

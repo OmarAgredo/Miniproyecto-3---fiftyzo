@@ -4,19 +4,38 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.fiftyzo.controller.StartController">
-    <center>
-        <VBox alignment="CENTER" spacing="18" styleClass="menu-panel" BorderPane.alignment="CENTER">
-            <padding><Insets top="40" right="55" bottom="40" left="55" /></padding>
-            <Label fx:id="titleLabel" text="50ZO" styleClass="title-label" />
-            <Label fx:id="subtitleLabel" text="A LIMINAL CARD SURVIVAL GAME" styleClass="subtitle-label" />
-            <Label fx:id="instructionLabel" wrapText="true" styleClass="instruction-label" />
-            <ComboBox fx:id="machineCountComboBox" promptText="Machine players" maxWidth="220" />
-            <Button fx:id="startButton" text="START GAME" onAction="#handleStartGame" styleClass="game-button" />
-            <Label text="Keep the table sum at 50 or below." styleClass="hint-label" />
-        </VBox>
-    </center>
-</BorderPane>
+<StackPane prefHeight="760" prefWidth="1100" styleClass="start-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.fiftyzo.controller.StartController">
+    <children>
+        <StackPane fx:id="startCanvas" maxHeight="760" maxWidth="1100" minHeight="760" minWidth="1100" prefHeight="760" prefWidth="1100" styleClass="start-canvas">
+            <children>
+                <StackPane maxHeight="760" maxWidth="1100" minHeight="760" minWidth="1100" prefHeight="760" prefWidth="1100" styleClass="start-scrim" />
+
+                <VBox alignment="CENTER" maxWidth="520" spacing="18" styleClass="start-menu-shell">
+                    <children>
+                        <VBox alignment="CENTER" spacing="6" styleClass="start-title-block">
+                            <children>
+                                <Label fx:id="titleLabel" text="50ZO" styleClass="start-title-label" />
+                                <Label fx:id="subtitleLabel" alignment="CENTER" text="Stay under 50. Stay in the room." textAlignment="CENTER" styleClass="start-subtitle-label" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER" maxWidth="410" spacing="14" styleClass="start-menu-panel">
+                            <padding><Insets bottom="30" left="38" right="38" top="30" /></padding>
+                            <children>
+                                <Label text="Machine Players" styleClass="start-field-label" />
+                                <ComboBox fx:id="machineCountComboBox" maxWidth="230" minWidth="230" prefWidth="230" promptText="Machine players" styleClass="start-combo" />
+                                <Button fx:id="startButton" minWidth="230" onAction="#handleStartGame" prefWidth="230" text="START GAME" styleClass="start-button" />
+                                <Label fx:id="instructionLabel" alignment="CENTER" maxWidth="320" textAlignment="CENTER" wrapText="true" styleClass="start-instruction-label" />
+                            </children>
+                        </VBox>
+
+                        <Label text="The room is dealing again." styleClass="start-footer-label" />
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </children>
+</StackPane>

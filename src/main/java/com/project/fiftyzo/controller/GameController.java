@@ -51,10 +51,10 @@ public final class GameController {
     @FXML private Label humanNameLabel;
     @FXML private Label deckCountLabel;
     @FXML private StackPane overlayLayer;
-    @FXML private VBox optionsOverlay;
-    @FXML private VBox aceOverlay;
-    @FXML private VBox confirmOverlay;
-    @FXML private VBox howToPlayOverlay;
+    @FXML private VBox optionsModal;
+    @FXML private VBox aceModal;
+    @FXML private VBox confirmModal;
+    @FXML private VBox howToPlayModal;
     @FXML private Button aceOneButton;
     @FXML private Button aceTenButton;
     @FXML private Button confirmAcceptButton;
@@ -123,24 +123,31 @@ public final class GameController {
     public void renderMachinePlayers() {
         machinePlayersContainer.getChildren().clear();
         for (MachinePlayer machine : game.getMachinePlayers()) {
-            VBox panel = new VBox(7);
-            panel.getStyleClass().add("machine-slot");
-            Label machineName = new Label(machine.getName());
-            machineName.getStyleClass().add("machine-name");
-            panel.getChildren().add(machineName);
-            if (!machine.isActive()) {
-                panel.getStyleClass().add("machine-eliminated");
-                panel.getChildren().add(new Label("ELIMINATED"));
-            } else {
-                HBox hand = new HBox(3);
-                hand.getStyleClass().add("machine-hand");
-                for (Card ignored : machine.getHandSnapshot()) {
-                    hand.getChildren().add(createMachineCardView());
-                }
-                panel.getChildren().add(hand);
-            }
-            machinePlayersContainer.getChildren().add(panel);
+            machinePlayersContainer.getChildren().add(createMachinePlayerSlot(machine));
         }
+    }
+
+    private VBox createMachinePlayerSlot(MachinePlayer machine) {
+        VBox slot = new VBox(7);
+        slot.getStyleClass().addAll("machine-slot", "machine-player-slot");
+
+        Label machineName = new Label(machine.getName());
+        machineName.getStyleClass().add("machine-name");
+        slot.getChildren().add(machineName);
+
+        if (!machine.isActive()) {
+            slot.getStyleClass().add("machine-eliminated");
+            slot.getChildren().add(new Label("ELIMINATED"));
+            return slot;
+        }
+
+        HBox cardRow = new HBox(3);
+        cardRow.getStyleClass().addAll("machine-hand", "machine-card-row");
+        for (Card ignored : machine.getHandSnapshot()) {
+            cardRow.getChildren().add(createMachineCardView());
+        }
+        slot.getChildren().add(cardRow);
+        return slot;
     }
 
     /** Renders the human hand and marks cards that cannot be played. */
@@ -202,13 +209,13 @@ public final class GameController {
         pendingAceCard = ace;
         aceOneButton.setDisable(!values.contains(1));
         aceTenButton.setDisable(!values.contains(10));
-        showOverlay(aceOverlay);
+        showOverlay(aceModal);
     }
 
     /** Shows non-invasive game screen options without changing turn flow. */
     @FXML
     public void showOptionsMenu() {
-        showOverlay(optionsOverlay);
+        showOverlay(optionsModal);
     }
 
     @FXML
@@ -233,7 +240,7 @@ public final class GameController {
 
     @FXML
     public void showHowToPlayOverlay() {
-        showOverlay(howToPlayOverlay);
+        showOverlay(howToPlayModal);
     }
 
     @FXML
@@ -485,7 +492,7 @@ public final class GameController {
         confirmCancelButton.setVisible(true);
         confirmCancelButton.setManaged(true);
         pendingConfirmationAction = action;
-        showOverlay(confirmOverlay);
+        showOverlay(confirmModal);
     }
 
     private void showMessageOverlay(String title, String message) {
@@ -495,14 +502,14 @@ public final class GameController {
         confirmCancelButton.setVisible(false);
         confirmCancelButton.setManaged(false);
         pendingConfirmationAction = null;
-        showOverlay(confirmOverlay);
+        showOverlay(confirmModal);
     }
 
     private void showOverlay(VBox overlay) {
-        hideOverlayPanel(optionsOverlay);
-        hideOverlayPanel(aceOverlay);
-        hideOverlayPanel(confirmOverlay);
-        hideOverlayPanel(howToPlayOverlay);
+        hideOverlayPanel(optionsModal);
+        hideOverlayPanel(aceModal);
+        hideOverlayPanel(confirmModal);
+        hideOverlayPanel(howToPlayModal);
         overlayLayer.setVisible(true);
         overlayLayer.setManaged(true);
         overlayLayer.setMouseTransparent(false);
@@ -511,10 +518,10 @@ public final class GameController {
     }
 
     private void hideOverlays() {
-        hideOverlayPanel(optionsOverlay);
-        hideOverlayPanel(aceOverlay);
-        hideOverlayPanel(confirmOverlay);
-        hideOverlayPanel(howToPlayOverlay);
+        hideOverlayPanel(optionsModal);
+        hideOverlayPanel(aceModal);
+        hideOverlayPanel(confirmModal);
+        hideOverlayPanel(howToPlayModal);
         overlayLayer.setVisible(false);
         overlayLayer.setManaged(false);
         overlayLayer.setMouseTransparent(true);

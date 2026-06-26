@@ -7,20 +7,45 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /** Displays the final result and handles restart or application exit. */
 public final class EndController {
+    @FXML private StackPane endCanvas;
     @FXML private Label resultTitleLabel;
     @FXML private Label winnerLabel;
     @FXML private VBox finalLogBox;
     @FXML private Button playAgainButton;
+    private static final double BASE_CANVAS_WIDTH = 1100;
+    private static final double BASE_CANVAS_HEIGHT = 760;
+
+    @FXML
+    public void initialize() {
+        endCanvas.sceneProperty().addListener((observable, oldScene, scene) -> {
+            if (scene != null) bindEndCanvasScale(scene);
+        });
+    }
+
+    private void bindEndCanvasScale(Scene scene) {
+        endCanvas.scaleXProperty().unbind();
+        endCanvas.scaleYProperty().unbind();
+        DoubleBinding canvasScale = Bindings.createDoubleBinding(
+                () -> Math.min(scene.getWidth() / BASE_CANVAS_WIDTH, scene.getHeight() / BASE_CANVAS_HEIGHT),
+                scene.widthProperty(),
+                scene.heightProperty());
+        endCanvas.scaleXProperty().bind(canvasScale);
+        endCanvas.scaleYProperty().bind(canvasScale);
+    }
 
     /** Supplies the winner after the game finishes. */
     public void setWinner(Player winner) {

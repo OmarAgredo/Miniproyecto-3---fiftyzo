@@ -9,7 +9,11 @@ import com.project.fiftyzo.util.GameConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Central, UI-independent implementation of the Fiftyzo game rules. */
+/**
+ * Central, UI-independent implementation of the 50ZO game rules.
+ * This model owns the deck, table, players, turn manager, elimination flow,
+ * and winner detection while remaining independent from JavaFX.
+ */
 public final class Game {
     private Deck deck;
     private Table table;
@@ -18,6 +22,12 @@ public final class Game {
     private final HumanPlayer humanPlayer;
     private final List<MachinePlayer> machinePlayers;
 
+    /**
+     * Creates a new game with one human player and the requested machine players.
+     *
+     * @param machineCount number of machine opponents, from 1 to 3
+     * @throws IllegalArgumentException if the machine count is outside the supported range
+     */
     public Game(int machineCount) {
         if (machineCount < GameConstants.MIN_MACHINE_PLAYERS || machineCount > GameConstants.MAX_MACHINE_PLAYERS) {
             throw new IllegalArgumentException("Machine player count must be between 1 and 3.");
@@ -44,7 +54,11 @@ public final class Game {
         updateTurnStatus();
     }
 
-    /** Initializes, shuffles, deals, and prepares the human player's first turn. */
+    /**
+     * Initializes, shuffles, deals, places the first table card, and prepares the first turn.
+     *
+     * @throws IllegalStateException if the game has already been started
+     */
     public void start() {
         if (status != GameStatus.NOT_STARTED) throw new IllegalStateException("A game can only be started once.");
         deck = new Deck(); deck.shuffle(); table = new Table();
@@ -60,12 +74,32 @@ public final class Game {
         updateTurnStatus();
     }
 
+    /**
+     * Deals the starting hand to every player.
+     *
+     * @throws EmptyDeckException if the deck cannot provide enough cards
+     */
     public void dealInitialCards() throws EmptyDeckException {
         ensureStarted();
         for (int i = 0; i < GameConstants.INITIAL_HAND_SIZE; i++) for (Player player : getPlayers()) player.receiveCard(deck.drawCard());
     }
+
+    /**
+     * Draws and places the first table card.
+     *
+     * @throws EmptyDeckException if the deck is empty
+     */
     public void placeInitialTableCard() throws EmptyDeckException { ensureStarted(); table.placeInitialCard(deck.drawCard()); }
 
+    /**
+     * Attempts to play a selected card for the human player.
+     *
+     * @param card card selected by the human player
+     * @param selectedValue selected value for the card, especially relevant for Aces
+     * @return result describing the move or elimination
+     * @throws InvalidMoveException if it is not the human turn or the move is illegal
+     * @throws GameOverException if the game has already ended
+     */
     public PlayResult playHumanCard(Card card, int selectedValue) throws InvalidMoveException, GameOverException {
         ensureActionable();
         if (getCurrentPlayer() != humanPlayer) throw new InvalidMoveException("It is not the human player's turn.");
@@ -73,6 +107,14 @@ public final class Game {
         return playCurrentCardSafely(card, selectedValue);
     }
 
+    /**
+     * Performs a complete machine turn, including choosing a card, drawing, and advancing.
+     *
+     * @return result of the machine play
+     * @throws NoPlayableCardException if no machine move can be selected
+     * @throws InvalidMoveException if the selected strategy move is rejected by the rules
+     * @throws GameOverException if the game has already ended
+     */
     public PlayResult playMachineTurn() throws NoPlayableCardException, InvalidMoveException, GameOverException {
         PlayResult playResult = playMachineCard();
         if (playResult.isPlayerEliminated()) return playResult;
@@ -89,6 +131,11 @@ public final class Game {
     /**
      * Plays the machine's chosen card without drawing or advancing the turn.
      * This supports timed presentation layers while keeping game rules in the model.
+     *
+     * @return result of the machine card play
+     * @throws NoPlayableCardException if the machine has no legal move
+     * @throws InvalidMoveException if the chosen move is invalid
+     * @throws GameOverException if the game has already ended
      */
     public PlayResult playMachineCard() throws NoPlayableCardException, InvalidMoveException, GameOverException {
         ensureActionable();
@@ -98,13 +145,28 @@ public final class Game {
         return playCardWithoutDrawing(move.getCard(), move.getValue());
     }
 
+    /**
+     * Draws one card for the current player, recycling table cards first if necessary.
+     *
+     * @throws EmptyDeckException if no card can be drawn after recycling
+     */
     public void drawCardForCurrentPlayer() throws EmptyDeckException {
         ensureStarted(); recycleDeckIfNeeded(); getCurrentPlayer().receiveCard(deck.drawCard());
     }
+
+    /**
+     * Rebuilds the deck from older table cards when the deck is empty.
+     * The visible top table card remains on the table.
+     */
     public void recycleDeckIfNeeded() {
         ensureStarted();
         if (deck.isEmpty()) { List<Card> recycle = table.removeRecycleCardsExceptTop(); deck.addCardsToBottom(recycle); deck.shuffle(); }
     }
+    /**
+     * Eliminates the current player and removes them from the active turn cycle.
+     *
+     * @throws GameOverException if elimination is requested after the game has ended
+     */
     public void eliminateCurrentPlayer() {
         ensureStarted();
         if (isGameOver()) throw new GameOverException("The game is over.");
@@ -112,13 +174,29 @@ public final class Game {
         deck.addCardsToBottom(player.getHandSnapshot()); player.clearHand(); player.eliminate(); turnManager.removeCurrentPlayer();
         if (isGameOver()) status = GameStatus.GAME_OVER; else updateTurnStatus();
     }
+    /**
+     * Processes the current player's lack of legal moves by eliminating them.
+     */
     public void processNoPlayableCardForCurrentPlayer() { eliminateCurrentPlayer(); }
+
+    /**
+     * Moves the turn pointer to the next active player when the game is still running.
+     */
     public void advanceTurn() { ensureStarted(); if (!isGameOver()) { turnManager.advanceTurn(); updateTurnStatus(); } }
-    /** Returns whether exactly one active player remains in the turn cycle. */
+    /**
+     * Returns whether exactly one active player remains in the turn cycle.
+     *
+     * @return true when the game has a single active winner
+     */
     public boolean isGameOver() {
         return turnManager != null && turnManager.hasWinner() && turnManager.getActivePlayers().size() == 1;
     }
-    /** Returns the sole active player only after the game is over. */
+
+    /**
+     * Returns the sole active player only after the game is over.
+     *
+     * @return the winner, or null while the game is still in progress
+     */
     public Player getWinner() { return isGameOver() ? turnManager.getWinner() : null; }
     public Player getCurrentPlayer() { return turnManager == null ? null : turnManager.getCurrentPlayer(); }
     public Deck getDeck() { return deck; }

@@ -1,3 +1,13 @@
 package com.project.fiftyzo.model;
-/** The participant whose choices are provided by a future user interface. */
-public final class HumanPlayer extends Player { public HumanPlayer(String name) { super(name); } }
+/**
+ * Represents the user-controlled participant in the game model.
+ * Human card choices are supplied by the JavaFX controller.
+ */
+public final class HumanPlayer extends Player {
+    /**
+     * Creates a human player with the supplied display name.
+     *
+     * @param name the player name shown in the interface and event log
+     */
+    public HumanPlayer(String name) { super(name); }
+}

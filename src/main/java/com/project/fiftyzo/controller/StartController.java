@@ -17,7 +17,10 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-/** Controls player-count selection on the start screen. */
+/**
+ * Controller for the start screen.
+ * It manages machine-player selection, fixed-canvas scaling, and the transition into a new game.
+ */
 public final class StartController {
     @FXML private StackPane startCanvas;
     @FXML private ComboBox<Integer> machineCountComboBox;
@@ -26,7 +29,9 @@ public final class StartController {
     private static final double BASE_CANVAS_WIDTH = 1100;
     private static final double BASE_CANVAS_HEIGHT = 760;
 
-    /** Initializes the allowed machine-player counts. */
+    /**
+     * Initializes the allowed machine-player counts and binds the start canvas scale.
+     */
     @FXML
     public void initialize() {
         startCanvas.sceneProperty().addListener((observable, oldScene, scene) -> {
@@ -37,6 +42,11 @@ public final class StartController {
         instructionLabel.setText("Choose how many machines are trapped in the room with you.");
     }
 
+    /**
+     * Binds the fixed 1100x760 start canvas to the current scene size.
+     *
+     * @param scene scene containing the start canvas
+     */
     private void bindStartCanvasScale(Scene scene) {
         startCanvas.scaleXProperty().unbind();
         startCanvas.scaleYProperty().unbind();
@@ -48,7 +58,11 @@ public final class StartController {
         startCanvas.scaleYProperty().bind(canvasScale);
     }
 
-    /** Starts a new game and transitions to the game screen. */
+    /**
+     * Starts a new game with the selected machine-player count and opens the game screen.
+     *
+     * @throws IllegalStateException if the game view cannot be loaded
+     */
     @FXML
     public void handleStartGame() {
         Game game = new Game(machineCountComboBox.getValue());

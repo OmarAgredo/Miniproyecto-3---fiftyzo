@@ -19,7 +19,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/** Displays the final result and handles restart or application exit. */
+/**
+ * Controller for the end screen.
+ * It displays the winner, renders the final event log, scales the fixed canvas, and handles restart or exit actions.
+ */
 public final class EndController {
     @FXML private StackPane endCanvas;
     @FXML private Label resultTitleLabel;
@@ -29,6 +32,9 @@ public final class EndController {
     private static final double BASE_CANVAS_WIDTH = 1100;
     private static final double BASE_CANVAS_HEIGHT = 760;
 
+    /**
+     * Binds fixed-canvas scaling after the end canvas is attached to a scene.
+     */
     @FXML
     public void initialize() {
         endCanvas.sceneProperty().addListener((observable, oldScene, scene) -> {
@@ -36,6 +42,11 @@ public final class EndController {
         });
     }
 
+    /**
+     * Binds the fixed 1100x760 end canvas to the current scene size.
+     *
+     * @param scene scene containing the end canvas
+     */
     private void bindEndCanvasScale(Scene scene) {
         endCanvas.scaleXProperty().unbind();
         endCanvas.scaleYProperty().unbind();
@@ -47,7 +58,11 @@ public final class EndController {
         endCanvas.scaleYProperty().bind(canvasScale);
     }
 
-    /** Supplies the winner after the game finishes. */
+    /**
+     * Supplies the winner after the game finishes without a final log.
+     *
+     * @param winner the winning player
+     */
     public void setWinner(Player winner) {
         setResult(winner, List.of());
     }
@@ -67,6 +82,11 @@ public final class EndController {
         renderFinalLog(finalLog);
     }
 
+    /**
+     * Renders the final event log messages into the end-screen log container.
+     *
+     * @param finalLog chronological event messages from the game screen
+     */
     private void renderFinalLog(List<String> finalLog) {
         finalLogBox.getChildren().clear();
         if (finalLog == null || finalLog.isEmpty()) {
@@ -78,6 +98,12 @@ public final class EndController {
         }
     }
 
+    /**
+     * Creates one styled label for a final event log entry.
+     *
+     * @param message event log text
+     * @return configured log label
+     */
     private Label createLogLabel(String message) {
         Label label = new Label(message);
         label.setWrapText(true);
@@ -85,7 +111,11 @@ public final class EndController {
         return label;
     }
 
-    /** Returns to the player-count selection screen. */
+    /**
+     * Returns to the player-count selection screen.
+     *
+     * @throws IllegalStateException if the start screen cannot be loaded
+     */
     @FXML
     public void handlePlayAgain() {
         try {

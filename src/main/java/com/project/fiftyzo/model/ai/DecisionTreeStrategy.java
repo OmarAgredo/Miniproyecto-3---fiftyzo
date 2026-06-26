@@ -7,13 +7,32 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/** Heuristic strategy that evaluates every legal move in a shallow decision tree. */
+/**
+ * Machine strategy that evaluates every legal move in a shallow decision tree.
+ * Scores favor stable sums, defensive negative cards, and situational use of nines.
+ */
 public final class DecisionTreeStrategy implements MachineStrategy {
+    /**
+     * Chooses the highest-scoring legal move for a machine player.
+     *
+     * @param hand immutable snapshot of the machine hand
+     * @param currentSum current table sum
+     * @return highest-scoring playable move
+     * @throws NoPlayableCardException if no child move can be generated
+     */
     @Override public PlayableMove chooseMove(List<Card> hand, int currentSum) throws NoPlayableCardException {
         DecisionNode root = buildTree(hand, currentSum);
         return root.getChildren().stream().max(Comparator.comparingInt(DecisionNode::getScore)).map(DecisionNode::getMove)
                 .orElseThrow(() -> new NoPlayableCardException("The machine player has no playable card."));
     }
+
+    /**
+     * Builds a one-level decision tree containing all legal moves from the hand.
+     *
+     * @param hand machine hand snapshot
+     * @param currentSum current table sum
+     * @return root decision node with legal move children
+     */
     public DecisionNode buildTree(List<Card> hand, int currentSum) {
         DecisionNode root = new DecisionNode(null);
         for (Card card : hand) for (int value : card.getPossibleValues()) {
@@ -22,6 +41,14 @@ public final class DecisionTreeStrategy implements MachineStrategy {
         }
         return root;
     }
+
+    /**
+     * Scores a candidate move using the machine player's heuristic.
+     *
+     * @param move candidate legal move
+     * @param currentSum current table sum before the move
+     * @return heuristic score, where higher values are preferred
+     */
     public int evaluateMove(PlayableMove move, int currentSum) {
         int result = move.getResultingSum();
         int score = 0;

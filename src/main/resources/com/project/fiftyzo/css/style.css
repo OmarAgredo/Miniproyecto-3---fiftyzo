@@ -648,6 +648,14 @@
     -fx-padding: 4 0 0 0;
     -fx-effect: dropshadow(gaussian, #11130C, 4, 0.44, 0, 1);
 }
+.turn-timer {
+    -fx-font-family: "Hey Comic", "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F6F0DD;
+    -fx-padding: 2 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(216, 243, 138, 0.58), 10, 0.34, 0, 0);
+}
 .sum-block {
     -fx-alignment: center;
     -fx-spacing: 1;

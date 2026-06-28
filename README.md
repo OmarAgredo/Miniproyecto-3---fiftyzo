@@ -2,6 +2,14 @@
 
 50ZO is a JavaFX implementation of the Cincuentazo card game with a custom warm backrooms, liminal circus, cursed arcade visual style. The project combines a playable desktop GUI with an MVC-oriented Java codebase, custom card assets, themed screens, custom exceptions, asynchronous machine turns, and JUnit tests.
 
+## Gameplay Preview
+
+Video walkthrough: [Add YouTube video link here](YOUR_YOUTUBE_URL_HERE)
+
+| Start Screen | Game Screen |
+| --- | --- |
+| ![50ZO start screen](src/main/resources/com/project/fiftyzo/images/screenshots/Screenshot%20Inicio.png) | ![50ZO game screen](src/main/resources/com/project/fiftyzo/images/screenshots/Screenshot%20game.png) |
+
 ## Game Objective
 
 The goal is to stay in the game without making the table sum exceed 50.
@@ -78,7 +86,9 @@ The project uses several explicit data structures:
 
 ## Threads and Asynchronous Behavior
 
-Machine turns are delayed with JavaFX `PauseTransition` so the interface stays responsive and machine actions feel more natural. The controller schedules separate pauses for machine thinking and machine drawing instead of blocking the JavaFX application thread.
+Machine turns use a real `ExecutorService` worker thread to simulate thinking and drawing delays without blocking the JavaFX Application Thread. The worker never updates JavaFX nodes directly; it returns to the UI thread with `Platform.runLater` before changing the game state, refreshing labels, or appending event-log messages.
+
+Human turns also use a real `ScheduledExecutorService` timer thread. The timer updates a visible countdown once per second through `Platform.runLater`, cancels when the human plays, and is stopped when turns change, the game ends, or the screen is left.
 
 ## Unit Tests
 
@@ -162,6 +172,7 @@ src/main/resources/com/project/fiftyzo/
   images/
     backgrounds/
     cards/
+    screenshots/
     stickers/
     ui/
   view/

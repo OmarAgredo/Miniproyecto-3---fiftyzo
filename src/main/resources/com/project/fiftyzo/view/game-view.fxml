@@ -73,6 +73,7 @@
                                 </children>
                             </HBox>
                             <Label fx:id="turnMessageLabel" alignment="CENTER" maxWidth="520" styleClass="turn-message" text="" textAlignment="CENTER" wrapText="true" />
+                            <Label fx:id="turnTimerLabel" alignment="CENTER" maxWidth="260" minWidth="220" prefWidth="240" styleClass="turn-timer" text="" textAlignment="CENTER" />
                         </VBox>
 
                         <VBox fx:id="eventLogPanel" layoutX="752" layoutY="170" minHeight="350" minWidth="270" prefHeight="368" prefWidth="286" spacing="12" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="170.0">

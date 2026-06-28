@@ -17,8 +17,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
-import javafx.animation.PauseTransition;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
@@ -35,7 +41,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * Controller for the main game screen.
@@ -54,6 +59,7 @@ public final class GameController {
     @FXML private ScrollPane eventLogScrollPane;
     @FXML private Label humanNameLabel;
     @FXML private Label deckCountLabel;
+    @FXML private Label turnTimerLabel;
     @FXML private StackPane overlayLayer;
     @FXML private VBox optionsModal;
     @FXML private VBox aceModal;
@@ -67,12 +73,24 @@ public final class GameController {
     @FXML private Label confirmMessageLabel;
 
     private Game game;
-    private boolean machineTurnScheduled;
+    private volatile boolean machineTurnScheduled;
     private boolean endScreenShown;
     private boolean gameOverReasonLogged;
+    private volatile boolean gameScreenActive = true;
+    private volatile ScheduledFuture<?> currentTimerTask;
     private Card pendingAceCard;
     private Runnable pendingConfirmationAction;
     private final List<String> eventMessages = new ArrayList<>();
+    private final ExecutorService machineTurnExecutor = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "fiftyzo-machine-turn");
+        thread.setDaemon(true);
+        return thread;
+    });
+    private final ScheduledExecutorService turnTimerExecutor = Executors.newSingleThreadScheduledExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "fiftyzo-human-turn-timer");
+        thread.setDaemon(true);
+        return thread;
+    });
     private static final double CARD_WIDTH = 88;
     private static final double CARD_HEIGHT = 124;
     private static final double MACHINE_CARD_WIDTH = 58;
@@ -81,6 +99,7 @@ public final class GameController {
     private static final double DECK_IMAGE_SCALE = 0.93;
     private static final double BASE_CANVAS_WIDTH = 1100;
     private static final double BASE_CANVAS_HEIGHT = 760;
+    private static final int HUMAN_TURN_SECONDS = 30;
     private static final double FACE_UP_VIEWPORT_INSET = 3;
     private static final int SPRITE_COLUMNS = 5;
     private static final String CARD_IMAGE_ROOT = "/com/project/fiftyzo/images/cards/";
@@ -293,7 +312,10 @@ public final class GameController {
      */
     @FXML
     public void requestExitGame() {
-        showConfirmation("Exit", "Exit the game?", "Exit", () -> ((Stage) currentSumLabel.getScene().getWindow()).close());
+        showConfirmation("Exit", "Exit the game?", "Exit", () -> {
+            shutdownConcurrentWorkers();
+            ((Stage) currentSumLabel.getScene().getWindow()).close();
+        });
     }
 
     /**
@@ -354,6 +376,7 @@ public final class GameController {
      */
     public void continueTurnFlow() {
         if (game.isGameOver()) {
+            cancelHumanTurnTimer();
             logGameOverReason();
             showEndScreen();
             return;
@@ -368,10 +391,13 @@ public final class GameController {
             return;
         }
         if (current instanceof HumanPlayer) {
+            startHumanTurnTimer();
             turnMessageLabel.setText("Your turn. Select a valid card.");
             renderHumanHand();
             return;
         }
+        cancelHumanTurnTimer();
+        turnTimerLabel.setText("MACHINE THINKING...");
         turnMessageLabel.setText(current.getName() + " is thinking...");
         renderHumanHand();
         if (!machineTurnScheduled) scheduleMachineTurn();
@@ -391,6 +417,7 @@ public final class GameController {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/project/fiftyzo/view/end-view.fxml")));
             Parent root = loader.load();
             loader.<EndController>getController().setResult(game.getWinner(), List.copyOf(eventMessages));
+            shutdownConcurrentWorkers();
             ((Stage) currentSumLabel.getScene().getWindow()).setScene(FiftyzoApplication.createScene(root));
         } catch (IOException exception) {
             throw new IllegalStateException("The end screen could not be loaded.", exception);
@@ -398,55 +425,70 @@ public final class GameController {
     }
 
     /**
-     * Schedules a delayed machine card play so the UI remains responsive.
+     * Starts a real background worker for delayed machine thinking.
+     * The game model and JavaFX nodes are still updated on the JavaFX Application Thread.
      */
     private void scheduleMachineTurn() {
         machineTurnScheduled = true;
-        PauseTransition pause = new PauseTransition(Duration.seconds(randomDelay(2.0, 4.0)));
-        pause.setOnFinished(event -> {
-            machineTurnScheduled = false;
-            if (game.isGameOver() || !(game.getCurrentPlayer() instanceof MachinePlayer)) return;
-            try {
-                MachinePlayer machine = (MachinePlayer) game.getCurrentPlayer();
-                PlayResult result = game.playMachineCard();
-                appendPlayResult(result);
-                renderGameState();
-                if (result.isPlayerEliminated()) {
-                    continueTurnFlow();
-                    return;
-                }
-                turnMessageLabel.setText(machine.getName() + " is drawing a card...");
-                appendLog(machine.getName() + " is drawing a card.");
-                scheduleMachineDraw(machine);
-            } catch (NoPlayableCardException | InvalidMoveException exception) {
-                showError("Machine turn failed", exception.getMessage());
-            }
+        machineTurnExecutor.submit(() -> {
+            if (!sleepForRandomDelay(2.0, 4.0)) return;
+            Platform.runLater(this::applyScheduledMachineTurn);
         });
-        pause.play();
     }
 
     /**
-     * Schedules the delayed draw step after a machine has played a card.
+     * Applies the machine card play after the background thinking delay.
+     */
+    private void applyScheduledMachineTurn() {
+        machineTurnScheduled = false;
+        if (!gameScreenActive || game.isGameOver() || !(game.getCurrentPlayer() instanceof MachinePlayer)) return;
+        try {
+            MachinePlayer machine = (MachinePlayer) game.getCurrentPlayer();
+            PlayResult result = game.playMachineCard();
+            appendPlayResult(result);
+            renderGameState();
+            if (result.isPlayerEliminated()) {
+                continueTurnFlow();
+                return;
+            }
+            turnMessageLabel.setText(machine.getName() + " is drawing a card...");
+            appendLog(machine.getName() + " is drawing a card.");
+            scheduleMachineDraw(machine);
+        } catch (NoPlayableCardException | InvalidMoveException exception) {
+            showError("Machine turn failed", exception.getMessage());
+        }
+    }
+
+    /**
+     * Schedules the delayed draw step after a machine has played a card on the machine executor.
      *
      * @param machine machine player that must draw before turn advancement
      */
     private void scheduleMachineDraw(MachinePlayer machine) {
-        PauseTransition pause = new PauseTransition(Duration.seconds(randomDelay(1.0, 2.0)));
-        pause.setOnFinished(event -> {
-            if (game.isGameOver() || game.getCurrentPlayer() != machine) return;
-            try {
-                boolean deckWasEmpty = game.getDeck().isEmpty();
-                game.drawCardForCurrentPlayer();
-                game.advanceTurn();
-                appendLog(machine.getName() + " drew a card.");
-                if (deckWasEmpty) appendLog("Deck was rebuilt from previous table cards.");
-                renderGameState();
-                continueTurnFlow();
-            } catch (EmptyDeckException exception) {
-                showError("Deck error", exception.getMessage());
-            }
+        machineTurnExecutor.submit(() -> {
+            if (!sleepForRandomDelay(1.0, 2.0)) return;
+            Platform.runLater(() -> applyScheduledMachineDraw(machine));
         });
-        pause.play();
+    }
+
+    /**
+     * Applies the machine draw step after the background draw delay.
+     *
+     * @param machine machine player that must draw before turn advancement
+     */
+    private void applyScheduledMachineDraw(MachinePlayer machine) {
+        if (!gameScreenActive || game.isGameOver() || game.getCurrentPlayer() != machine) return;
+        try {
+            boolean deckWasEmpty = game.getDeck().isEmpty();
+            game.drawCardForCurrentPlayer();
+            game.advanceTurn();
+            appendLog(machine.getName() + " drew a card.");
+            if (deckWasEmpty) appendLog("Deck was rebuilt from previous table cards.");
+            renderGameState();
+            continueTurnFlow();
+        } catch (EmptyDeckException exception) {
+            showError("Deck error", exception.getMessage());
+        }
     }
 
     /**
@@ -459,6 +501,7 @@ public final class GameController {
         try {
             boolean deckWasEmpty = game.getDeck().isEmpty();
             PlayResult result = game.playHumanCard(card, value);
+            cancelHumanTurnTimer();
             appendPlayResult(result);
             if (deckWasEmpty) appendLog("Deck was rebuilt from table cards.");
             renderGameState();
@@ -491,6 +534,22 @@ public final class GameController {
     }
 
     /**
+     * Sleeps on a background worker to simulate thinking without blocking JavaFX.
+     *
+     * @param minSeconds minimum delay in seconds
+     * @param maxSeconds maximum delay in seconds
+     */
+    private boolean sleepForRandomDelay(double minSeconds, double maxSeconds) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(Math.round(randomDelay(minSeconds, maxSeconds) * 1000));
+            return true;
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
+    }
+
+    /**
      * Appends the user-facing message for a play or elimination result.
      *
      * @param result result returned by the game model
@@ -511,6 +570,62 @@ public final class GameController {
     }
 
     /**
+     * Starts a scheduled human turn countdown on a real timer thread.
+     */
+    private void startHumanTurnTimer() {
+        cancelHumanTurnTimer();
+        AtomicInteger remainingSeconds = new AtomicInteger(HUMAN_TURN_SECONDS);
+        turnTimerLabel.setText("TIME LEFT: " + HUMAN_TURN_SECONDS + "s");
+        currentTimerTask = turnTimerExecutor.scheduleAtFixedRate(() -> {
+            int seconds = remainingSeconds.getAndDecrement();
+            if (seconds < 0 || !gameScreenActive) {
+                cancelTimerFromWorker();
+                return;
+            }
+            Platform.runLater(() -> updateHumanTurnTimer(seconds));
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Updates timer UI on the JavaFX Application Thread.
+     *
+     * @param seconds remaining seconds to display
+     */
+    private void updateHumanTurnTimer(int seconds) {
+        if (!gameScreenActive || game.isGameOver() || !(game.getCurrentPlayer() instanceof HumanPlayer)) return;
+        turnTimerLabel.setText("TIME LEFT: " + Math.max(seconds, 0) + "s");
+        if (seconds == 0) appendLog("Timer expired. Please make a move.");
+    }
+
+    /**
+     * Cancels the currently active human timer task.
+     */
+    private void cancelHumanTurnTimer() {
+        ScheduledFuture<?> task = currentTimerTask;
+        currentTimerTask = null;
+        if (task != null) task.cancel(false);
+        if (turnTimerLabel != null) turnTimerLabel.setText("");
+    }
+
+    /**
+     * Cancels the current timer from the timer worker thread.
+     */
+    private void cancelTimerFromWorker() {
+        ScheduledFuture<?> task = currentTimerTask;
+        if (task != null) task.cancel(false);
+    }
+
+    /**
+     * Stops background workers when this game screen is no longer active.
+     */
+    private void shutdownConcurrentWorkers() {
+        gameScreenActive = false;
+        cancelHumanTurnTimer();
+        machineTurnExecutor.shutdownNow();
+        turnTimerExecutor.shutdownNow();
+    }
+
+    /**
      * Loads the start screen, usually after confirmation from an overlay.
      *
      * @throws IllegalStateException if the start screen cannot be loaded
@@ -518,6 +633,7 @@ public final class GameController {
     private void loadStartScreen() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/project/fiftyzo/view/start-view.fxml")));
+            shutdownConcurrentWorkers();
             ((Stage) currentSumLabel.getScene().getWindow()).setScene(FiftyzoApplication.createScene(root));
         } catch (IOException exception) {
             throw new IllegalStateException("The start screen could not be loaded.", exception);

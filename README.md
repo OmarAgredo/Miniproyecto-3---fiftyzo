@@ -4,7 +4,7 @@
 
 ## Gameplay Preview
 
-Video walkthrough: [Add YouTube video link here](YOUR_YOUTUBE_URL_HERE)
+Video walkthrough: [Add YouTube video link here](https://github.com/OmarAgredo/Miniproyecto-3---fiftyzo)
 
 | Start Screen | Game Screen |
 | --- | --- |

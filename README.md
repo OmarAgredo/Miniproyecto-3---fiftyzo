@@ -207,4 +207,4 @@ This project demonstrates:
 
 ## Authors
 
-- Omar Esteban Agredo
+- Omar Esteban Agredo - 2516317
